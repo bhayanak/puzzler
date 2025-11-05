@@ -810,3 +810,26 @@
   0%, 100% { transform: scale(1); }
   50% { transform: scale(0.9); }
 }
+/* Touch-specific styles for mobile devices */
+@media (hover: none) and (pointer: coarse) {
+  .light-cell {
+    /* Larger touch targets on mobile */
+    min-width: 40px;
+    min-height: 40px;
+    /* Prevent text selection on touch */
+    user-select: none;
+    -webkit-user-select: none;
+    /* Improve touch responsiveness */
+    touch-action: manipulation;
+  }
+
+  .light-cell:active {
+    transform: scale(0.95);
+    transition: transform 0.1s ease;
+  }
+
+  /* Remove hover effects on touch devices */
+  .light-cell:hover {
+    transform: none;
+  }
+}

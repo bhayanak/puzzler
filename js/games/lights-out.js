@@ -81,6 +81,17 @@ class LightsOutGame {
                 lightCell.addEventListener('mouseenter', (e) => this.showPreview(e));
                 lightCell.addEventListener('mouseleave', () => this.hidePreview());
                 
+                // Add touch support for mobile devices
+                lightCell.addEventListener('touchstart', (e) => {
+                    e.preventDefault(); // Prevent ghost clicks
+                    this.showPreview(e);
+                });
+                lightCell.addEventListener('touchend', (e) => {
+                    e.preventDefault();
+                    this.hidePreview();
+                    this.handleLightClick(e);
+                });
+
                 this.gameBoard.appendChild(lightCell);
             }
         }
@@ -161,11 +172,34 @@ class LightsOutGame {
             return;
         }
         
-        const row = parseInt(event.target.dataset.row);
-        const col = parseInt(event.target.dataset.col);
+        // Get the target element - might be different on touch vs click
+        let target = event.target;
+        if (!target.dataset.row) {
+            // If clicked element doesn't have data attributes, find the light cell
+            target = target.closest('[data-row][data-col]');
+        }
+
+        if (!target || !target.dataset.row) {
+            console.warn('⚠️ Could not find light cell data');
+            return;
+        }
+
+        const row = parseInt(target.dataset.row);
+        const col = parseInt(target.dataset.col);
         console.log('📍 Toggling light at:', row, col);
         
+        // Prevent multiple rapid clicks/touches
+        if (this._processing) {
+            return;
+        }
+        this._processing = true;
+
         this.makeMove(row, col);
+
+        // Clear processing flag after animation
+        setTimeout(() => {
+            this._processing = false;
+        }, 100);
     }
 
     makeMove(row, col) {

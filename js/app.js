@@ -952,9 +952,16 @@ class PuzzleApp {
     // Sliding Puzzle - uses own localStorage (best moves)
     const slidingBestMovesEl = Utils.$('#sliding-puzzle-best-moves');
     if (slidingBestMovesEl) {
-      const slidingStats = Utils.storage.get('slidingPuzzleStats', {});
-      if (slidingStats.bestMoves && slidingStats.bestMoves !== Infinity) {
-        slidingBestMovesEl.textContent = slidingStats.bestMoves.toString();
+      const slidingStats = Utils.storage.get('slidingPuzzle_stats', {});
+      if (slidingStats.bestScores) {
+        // Find the best (lowest) moves across all board sizes
+        const allScores = Object.values(slidingStats.bestScores);
+        if (allScores.length > 0) {
+          const bestMoves = Math.min(...allScores.map(score => score.moves));
+          slidingBestMovesEl.textContent = bestMoves.toString();
+        } else {
+          slidingBestMovesEl.textContent = '--';
+        }
       } else {
         slidingBestMovesEl.textContent = '--';
       }

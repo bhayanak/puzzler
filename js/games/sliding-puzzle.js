@@ -276,16 +276,25 @@ class SlidingPuzzle {
     const tileRow = Math.floor(tileIndex / this.boardSize);
     const tileCol = tileIndex % this.boardSize;
     
-    // Calculate position as percentage of the full image
-    // Each tile should show 1/boardSize of the image width/height
-    const bgPosX = -(tileCol * 100); // Negative to move image left
-    const bgPosY = -(tileRow * 100); // Negative to move image up
+    // Calculate position - ensure mobile compatibility with proper percentage calculation
+    // Each tile shows 1/boardSize of the image, positioned correctly
+    const bgPosX = tileCol * (100 / (this.boardSize - 1));
+    const bgPosY = tileRow * (100 / (this.boardSize - 1));
     
     // Use setProperty with priority to override CSS
     tile.style.setProperty('background-image', `url(${this.currentImage})`, 'important');
     tile.style.setProperty('background-position', `${bgPosX}% ${bgPosY}%`, 'important');
     tile.style.setProperty('background-size', `${this.boardSize * 100}% ${this.boardSize * 100}%`, 'important');
     tile.style.setProperty('background-color', 'transparent', 'important');
+    tile.style.setProperty('background-repeat', 'no-repeat', 'important');
+
+    // Add mobile-specific handling
+    if (window.innerWidth <= 768) {
+      // On mobile, ensure the background attachment is handled properly
+      tile.style.setProperty('background-attachment', 'scroll', 'important');
+      // Force hardware acceleration on mobile for smoother rendering
+      tile.style.setProperty('will-change', 'background-position', 'important');
+    }
     
     console.log('✅ Image applied to tile', tileNumber, 'at row', tileRow, 'col', tileCol, 'position', bgPosX + '%', bgPosY + '%');
     console.log('🖼️ Tile styles set:', {
