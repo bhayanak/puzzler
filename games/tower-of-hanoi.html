@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Tower of Hanoi - Classic puzzle game with beautiful interface and mobile support">
+    <meta name="theme-color" content="#667eea">
+    
+    <title>Tower of Hanoi - Puzzle Collection</title>
+    
+    <!-- Preconnect to optimize font loading -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="../css/games/tower-of-hanoi.css">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🗼</text></svg>">
+</head>
+<body>
+    <div class="game-container">
+        <!-- Game Header -->
+        <header class="game-header">
+            <div class="container">
+                <div class="game-header-content">
+                    <div class="game-nav">
+                        <a href="../index.html" class="back-btn">
+                            <span class="back-icon">←</span>
+                            <span class="back-text">Back to Games</span>
+                        </a>
+                        <div class="game-title">
+                            <h1>🗼 Tower of Hanoi</h1>
+                            <p class="game-subtitle">Classic Mathematical Puzzle</p>
+                        </div>
+                    </div>
+                    
+                    <div class="game-actions">
+                        <button class="btn btn-outline btn-sm" id="rules-btn">
+                            <span class="btn-icon">❓</span>
+                            Rules
+                        </button>
+                        <button class="btn btn-warning btn-sm" id="reset-btn">
+                            <span class="btn-icon">🔄</span>
+                            Reset
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Game Stats Panel -->
+        <section class="game-stats-panel">
+            <div class="container">
+                <div class="stats-row">
+                    <div class="stat-item">
+                        <div class="stat-label">Moves</div>
+                        <div class="stat-value" id="move-count">0</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Time</div>
+                        <div class="stat-value" id="timer">00:00</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Optimal</div>
+                        <div class="stat-value" id="optimal-moves">7</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Difficulty</div>
+                        <div class="stat-value" id="difficulty-level">Beginner</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Game Controls -->
+        <section class="game-controls">
+            <div class="container">
+                <div class="controls-row">
+                    <div class="difficulty-selector">
+                        <label for="disk-count">Disks:</label>
+                        <select id="disk-count" class="form-select">
+                            <option value="3">3 (Beginner)</option>
+                            <option value="4">4 (Intermediate)</option>
+                            <option value="5">5 (Advanced)</option>
+                            <option value="6">6 (Expert)</option>
+                            <option value="7">7 (Master)</option>
+                        </select>
+                    </div>
+                    
+                    <div class="game-state-controls">
+                        <button class="btn btn-secondary" id="pause-btn">
+                            <span class="btn-icon">⏸️</span>
+                            Pause
+                        </button>
+                        <button class="btn btn-primary" id="hint-btn">
+                            <span class="btn-icon">💡</span>
+                            Hint
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Main Game Area -->
+        <main class="game-main">
+            <div class="container">
+                <div class="game-board" id="game-board">
+                    <div class="towers-container">
+                        <!-- Source Tower (Left) -->
+                        <div class="tower-wrapper">
+                            <div class="tower" id="tower-0" data-tower="0">
+                                <div class="tower-pole"></div>
+                                <div class="tower-base"></div>
+                                <div class="tower-label">Source</div>
+                                <div class="disk-container"></div>
+                            </div>
+                        </div>
+                        
+                        <!-- Auxiliary Tower (Middle) -->
+                        <div class="tower-wrapper">
+                            <div class="tower" id="tower-1" data-tower="1">
+                                <div class="tower-pole"></div>
+                                <div class="tower-base"></div>
+                                <div class="tower-label">Auxiliary</div>
+                                <div class="disk-container"></div>
+                            </div>
+                        </div>
+                        
+                        <!-- Destination Tower (Right) -->
+                        <div class="tower-wrapper">
+                            <div class="tower" id="tower-2" data-tower="2">
+                                <div class="tower-pole"></div>
+                                <div class="tower-base"></div>
+                                <div class="tower-label">Destination</div>
+                                <div class="disk-container"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Game Status Messages -->
+                    <div class="game-messages" id="game-messages">
+                        <div class="message-text">Click a disk to select it, then click a tower to move it there</div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Game Footer -->
+        <footer class="game-footer">
+            <div class="container">
+                <div class="footer-actions">
+                    <button class="btn btn-outline" id="undo-btn" disabled>
+                        <span class="btn-icon">↶</span>
+                        Undo
+                    </button>
+                    <button class="btn btn-success" id="auto-solve-btn">
+                        <span class="btn-icon">🤖</span>
+                        Auto Solve
+                    </button>
+                    <button class="btn btn-primary" id="new-game-btn">
+                        <span class="btn-icon">🎮</span>
+                        New Game
+                    </button>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Game Rules Modal -->
+    <div id="rules-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Tower of Hanoi Rules</h3>
+                <button class="modal-close" id="close-rules">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="rules-content">
+                    <div class="rule-section">
+                        <h4>🎯 Objective</h4>
+                        <p>Move all disks from the <strong>Source</strong> tower to the <strong>Destination</strong> tower.</p>
+                    </div>
+                    
+                    <div class="rule-section">
+                        <h4>📜 Rules</h4>
+                        <ol>
+                            <li>You can only move <strong>one disk at a time</strong></li>
+                            <li>You can only move the <strong>top disk</strong> from a tower</li>
+                            <li>You <strong>cannot place a larger disk</strong> on top of a smaller disk</li>
+                        </ol>
+                    </div>
+                    
+                    <div class="rule-section">
+                        <h4>💡 Strategy Tips</h4>
+                        <ul>
+                            <li>Start by moving the <strong>smallest disk</strong></li>
+                            <li>The smallest disk should move in a circular pattern: Source → Destination → Auxiliary → Source...</li>
+                            <li>Between moves of the smallest disk, make the <strong>only legal move</strong> not involving it</li>
+                            <li>Think recursively: to move n disks, first move n-1 disks to auxiliary tower</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="rule-section">
+                        <h4>🏆 Difficulty Levels</h4>
+                        <div class="difficulty-grid">
+                            <div class="difficulty-item">
+                                <strong>3 disks</strong><br>
+                                <span class="difficulty-badge beginner">Beginner</span><br>
+                                Minimum: 7 moves
+                            </div>
+                            <div class="difficulty-item">
+                                <strong>4 disks</strong><br>
+                                <span class="difficulty-badge intermediate">Intermediate</span><br>
+                                Minimum: 15 moves
+                            </div>
+                            <div class="difficulty-item">
+                                <strong>5 disks</strong><br>
+                                <span class="difficulty-badge advanced">Advanced</span><br>
+                                Minimum: 31 moves
+                            </div>
+                            <div class="difficulty-item">
+                                <strong>6+ disks</strong><br>
+                                <span class="difficulty-badge expert">Expert</span><br>
+                                Minimum: 63+ moves
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" id="start-game-btn">Let's Play!</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Win Celebration Modal -->
+    <div id="win-modal" class="modal">
+        <div class="modal-content win-modal-content">
+            <div class="modal-header">
+                <h3>🎉 Congratulations!</h3>
+            </div>
+            <div class="modal-body">
+                <div class="win-content">
+                    <div class="win-message">
+                        <h4>Puzzle Completed Successfully!</h4>
+                        <p>You've mastered the Tower of Hanoi challenge!</p>
+                    </div>
+                    
+                    <div class="win-stats">
+                        <div class="win-stat">
+                            <div class="win-stat-label">Moves Used</div>
+                            <div class="win-stat-value" id="final-moves">0</div>
+                        </div>
+                        <div class="win-stat">
+                            <div class="win-stat-label">Time Taken</div>
+                            <div class="win-stat-value" id="final-time">00:00</div>
+                        </div>
+                        <div class="win-stat">
+                            <div class="win-stat-label">Efficiency</div>
+                            <div class="win-stat-value" id="efficiency-score">0%</div>
+                        </div>
+                    </div>
+                    
+                    <div class="win-performance" id="win-performance">
+                        <!-- Performance rating will be inserted here -->
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" id="share-result-btn">Share Result</button>
+                <button class="btn btn-secondary" id="play-again-btn">Play Again</button>
+                <button class="btn btn-primary" id="next-level-btn">Next Level</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pause Overlay -->
+    <div id="pause-overlay" class="pause-overlay">
+        <div class="pause-content">
+            <h3>Game Paused</h3>
+            <p>Click resume to continue playing</p>
+            <button class="btn btn-primary" id="resume-btn">
+                <span class="btn-icon">▶️</span>
+                Resume Game
+            </button>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="../js/utils.js"></script>
+    <script src="../js/games/tower-of-hanoi.js"></script>
+    
+    <script>
+        // Initialize game when DOM is ready
+        document.addEventListener('DOMContentLoaded', () => {
+            window.towerOfHanoiGame = new TowerOfHanoi();
+        });
+    </script>
+</body>
+</html>

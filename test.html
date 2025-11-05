@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tower of Hanoi - Quick Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #f0f0f0;
+        }
+        .test-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .test-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+        .test-result {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .stats-display {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        .stat-card {
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+        }
+        .stat-label { font-size: 14px; color: #666; margin-bottom: 5px; }
+        .stat-value { font-size: 24px; font-weight: bold; color: #333; }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🗼 Tower of Hanoi - Test Page</h1>
+        <p>This page tests the fixes for disk stacking and score saving.</p>
+        
+        <div class="test-section">
+            <h2>📊 Local Storage Test</h2>
+            <p>Testing localStorage functionality and statistics saving:</p>
+            <div id="storage-test-results"></div>
+            <button onclick="testLocalStorage()">Test Storage Functions</button>
+            <button onclick="clearAllData()">Clear All Data</button>
+        </div>
+        
+        <div class="test-section">
+            <h2>📈 Current Statistics</h2>
+            <div id="current-stats">
+                <div class="stats-display">
+                    <div class="stat-card">
+                        <div class="stat-label">Games Completed</div>
+                        <div class="stat-value" id="total-games-display">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Best Time</div>
+                        <div class="stat-value" id="best-time-display">--:--</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Completion Rate</div>
+                        <div class="stat-value" id="completion-rate-display">0%</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Current Streak</div>
+                        <div class="stat-value" id="current-streak-display">0</div>
+                    </div>
+                </div>
+            </div>
+            <button onclick="refreshStats()">Refresh Stats</button>
+        </div>
+        
+        <div class="test-section">
+            <h2>🎮 Game Links</h2>
+            <p>Quick access to test the games:</p>
+            <a href="index.html" style="display: inline-block; padding: 10px 20px; background: #007bff; color: white; text-decoration: none; border-radius: 5px; margin: 5px;">Main App</a>
+            <a href="games/tower-of-hanoi.html" style="display: inline-block; padding: 10px 20px; background: #28a745; color: white; text-decoration: none; border-radius: 5px; margin: 5px;">Tower of Hanoi</a>
+        </div>
+        
+        <div class="test-section">
+            <h2>📋 Test Instructions</h2>
+            <ol>
+                <li><strong>Test Disk Stacking:</strong> Go to Tower of Hanoi game and verify disks are properly stacked (not overlapping)</li>
+                <li><strong>Test Score Saving:</strong> Complete a game and return to main page to see updated statistics</li>
+                <li><strong>Test Statistics Persistence:</strong> Refresh the page and verify stats are maintained</li>
+                <li><strong>Test Achievements:</strong> Play multiple games to unlock achievements</li>
+            </ol>
+        </div>
+    </div>
+
+    <script>
+        // Utility functions for testing
+        function getFromStorage(key, defaultValue) {
+            try {
+                const item = localStorage.getItem(key);
+                return item ? JSON.parse(item) : defaultValue;
+            } catch (e) {
+                return defaultValue;
+            }
+        }
+
+        function setToStorage(key, value) {
+            try {
+                localStorage.setItem(key, JSON.stringify(value));
+                return true;
+            } catch (e) {
+                return false;
+            }
+        }
+
+        function testLocalStorage() {
+            const resultsDiv = document.getElementById('storage-test-results');
+            resultsDiv.innerHTML = '';
+
+            // Test 1: Basic localStorage functionality
+            try {
+                const testData = { test: 'data', timestamp: Date.now() };
+                setToStorage('test-key', testData);
+                const retrieved = getFromStorage('test-key');
+                
+                if (retrieved && retrieved.test === 'data') {
+                    resultsDiv.innerHTML += '<div class="test-result success">✓ Basic localStorage read/write works</div>';
+                } else {
+                    resultsDiv.innerHTML += '<div class="test-result error">✗ Basic localStorage failed</div>';
+                }
+            } catch (e) {
+                resultsDiv.innerHTML += '<div class="test-result error">✗ localStorage error: ' + e.message + '</div>';
+            }
+
+            // Test 2: Check for existing game stats
+            const puzzleStats = getFromStorage('puzzleStats', null);
+            if (puzzleStats) {
+                resultsDiv.innerHTML += '<div class="test-result success">✓ Puzzle statistics found in storage</div>';
+                resultsDiv.innerHTML += '<div class="test-result">Games completed: ' + puzzleStats.totalGamesCompleted + '</div>';
+            } else {
+                resultsDiv.innerHTML += '<div class="test-result error">! No puzzle statistics found (expected for first run)</div>';
+            }
+
+            // Test 3: Check Tower of Hanoi specific stats
+            const tohStats = getFromStorage('toh_global_stats', null);
+            if (tohStats) {
+                resultsDiv.innerHTML += '<div class="test-result success">✓ Tower of Hanoi statistics found</div>';
+                resultsDiv.innerHTML += '<div class="test-result">ToH games played: ' + tohStats.gamesPlayed + '</div>';
+            } else {
+                resultsDiv.innerHTML += '<div class="test-result error">! No Tower of Hanoi statistics found</div>';
+            }
+
+            // Refresh the stats display
+            refreshStats();
+        }
+
+        function refreshStats() {
+            const stats = getFromStorage('puzzleStats', {
+                totalGamesCompleted: 0,
+                totalGamesPlayed: 0,
+                bestTimes: {},
+                streaks: { current: 0 }
+            });
+
+            document.getElementById('total-games-display').textContent = stats.totalGamesCompleted || 0;
+            
+            if (stats.bestTimes && stats.bestTimes['tower-of-hanoi']) {
+                const seconds = stats.bestTimes['tower-of-hanoi'];
+                const minutes = Math.floor(seconds / 60);
+                const remainingSeconds = seconds % 60;
+                document.getElementById('best-time-display').textContent = 
+                    minutes.toString().padStart(2, '0') + ':' + remainingSeconds.toString().padStart(2, '0');
+            } else {
+                document.getElementById('best-time-display').textContent = '--:--';
+            }
+
+            if (stats.totalGamesPlayed > 0) {
+                const rate = Math.round((stats.totalGamesCompleted / stats.totalGamesPlayed) * 100);
+                document.getElementById('completion-rate-display').textContent = rate + '%';
+            } else {
+                document.getElementById('completion-rate-display').textContent = '0%';
+            }
+
+            document.getElementById('current-streak-display').textContent = (stats.streaks && stats.streaks.current) || 0;
+        }
+
+        function clearAllData() {
+            if (confirm('This will clear all saved statistics and achievements. Continue?')) {
+                localStorage.removeItem('puzzleStats');
+                localStorage.removeItem('toh_global_stats');
+                
+                // Clear any individual game records
+                Object.keys(localStorage).forEach(key => {
+                    if (key.startsWith('toh_game_')) {
+                        localStorage.removeItem(key);
+                    }
+                });
+
+                alert('All data cleared!');
+                refreshStats();
+            }
+        }
+
+        // Initialize display
+        document.addEventListener('DOMContentLoaded', function() {
+            refreshStats();
+            
+            // Auto-refresh stats every 5 seconds
+            setInterval(refreshStats, 5000);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lights Out - Puzzle Collection</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="../css/games/lights-out.css">
+</head>
+
+<body class="game-page">
+    <!-- Navigation Header -->
+    <header class="game-header">
+        <nav class="game-nav">
+            <a href="../index.html" class="nav-back" aria-label="Back to main page">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="m12 19-7-7 7-7" />
+                    <path d="m19 12H5" />
+                </svg>
+                <span>Back to Games</span>
+            </a>
+
+            <div class="game-title">
+                <h1>Lights Out</h1>
+                <p>Turn off all lights by strategic clicking</p>
+            </div>
+
+            <div class="game-actions">
+                <button id="help-btn" class="btn-icon" aria-label="Show help">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10" />
+                        <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+                        <point cx="12" cy="17" />
+                    </svg>
+                </button>
+
+                <button id="settings-btn" class="btn-icon" aria-label="Game settings">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="3" />
+                        <path d="M12 1v6m0 6v6" />
+                        <path d="M1 12h6m6 0h6" />
+                    </svg>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Game Interface -->
+    <main class="game-container">
+        <!-- Game Controls -->
+        <section class="game-controls">
+            <div class="control-group">
+                <label for="grid-size">Grid Size:</label>
+                <select id="grid-size" class="select-input">
+                    <option value="3">3×3 (Easy)</option>
+                    <option value="5" selected>5×5 (Classic)</option>
+                    <option value="7">7×7 (Expert)</option>
+                </select>
+            </div>
+
+            <div class="control-group">
+                <label for="pattern-type">Pattern Type:</label>
+                <select id="pattern-type" class="select-input">
+                    <option value="random" selected>Random</option>
+                    <option value="preset">Preset Patterns</option>
+                    <option value="custom">Custom Design</option>
+                </select>
+            </div>
+
+            <div class="control-group">
+                <button id="new-game-btn" class="btn btn-primary">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="1 4 1 10 7 10" />
+                        <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10" />
+                    </svg>
+                    New Game
+                </button>
+
+                <button id="shuffle-btn" class="btn btn-secondary">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="16 3 21 3 21 8" />
+                        <line x1="4" y1="20" x2="21" y2="3" />
+                        <polyline points="21 16 21 21 16 21" />
+                        <line x1="15" y1="15" x2="21" y2="21" />
+                        <line x1="4" y1="4" x2="9" y2="9" />
+                    </svg>
+                    Shuffle
+                </button>
+            </div>
+        </section>
+
+        <!-- Preset Pattern Selector -->
+        <section class="pattern-selector" id="pattern-selector" style="display: none;">
+            <h3>Choose a Pattern:</h3>
+            <div class="pattern-grid" id="pattern-grid">
+                <!-- Pattern previews will be generated dynamically -->
+            </div>
+        </section>
+
+        <!-- Game Stats -->
+        <section class="game-stats">
+            <div class="stat-item">
+                <span class="stat-label">Moves:</span>
+                <span class="stat-value" id="move-count">0</span>
+            </div>
+
+            <div class="stat-item">
+                <span class="stat-label">Time:</span>
+                <span class="stat-value" id="game-time">00:00</span>
+            </div>
+
+            <div class="stat-item">
+                <span class="stat-label">Best Moves:</span>
+                <span class="stat-value" id="best-moves">—</span>
+            </div>
+
+            <div class="stat-item">
+                <span class="stat-label">Best Time:</span>
+                <span class="stat-value" id="best-time">—</span>
+            </div>
+
+            <div class="stat-item">
+                <span class="stat-label">Difficulty:</span>
+                <span class="stat-value" id="current-difficulty">5×5</span>
+            </div>
+        </section>
+
+        <!-- Game Board -->
+        <section class="game-board-container">
+            <div class="lights-grid" id="lights-grid">
+                <!-- Light cells will be generated dynamically -->
+            </div>
+
+            <div class="board-overlay" id="board-overlay">
+                <div class="overlay-content">
+                    <div class="success-animation" id="success-animation" style="display: none;">
+                        <div class="success-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                                <path d="M20 6L9 17L4 12" />
+                            </svg>
+                        </div>
+                        <h3>All Lights Out!</h3>
+                        <p id="completion-stats">Excellent work!</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Action Buttons -->
+        <section class="game-actions-bottom">
+            <button id="hint-btn" class="btn btn-outline">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10" />
+                    <path d="M8 12h8" />
+                    <path d="M12 8v8" />
+                </svg>
+                Hint
+            </button>
+
+            <button id="solve-btn" class="btn btn-outline">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+                </svg>
+                Auto Solve
+            </button>
+
+            <button id="reset-btn" class="btn btn-outline">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="1 4 1 10 7 10" />
+                    <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10" />
+                </svg>
+                Reset
+            </button>
+        </section>
+    </main>
+
+    <!-- Modals -->
+    <!-- Help Modal -->
+    <div class="modal-overlay" id="help-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>How to Play Lights Out</h2>
+                <button class="modal-close" aria-label="Close modal">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18" />
+                        <line x1="6" y1="6" x2="18" y2="18" />
+                    </svg>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <div class="help-section">
+                    <h3>🎯 Objective</h3>
+                    <p>Turn off all the lights on the grid by clicking on them strategically. When you click a light, it
+                        toggles along with its adjacent neighbors.</p>
+                </div>
+
+                <div class="help-section">
+                    <h3>🎮 How to Play</h3>
+                    <ul>
+                        <li><strong>Click a Light:</strong> Toggles the clicked light and its adjacent neighbors (up,
+                            down, left, right)</li>
+                        <li><strong>Goal:</strong> Get all lights turned off (dark state)</li>
+                        <li><strong>Strategy:</strong> Think ahead - each click affects multiple lights</li>
+                        <li><strong>Patterns:</strong> Look for patterns and use logical deduction</li>
+                    </ul>
+                </div>
+
+                <div class="help-section">
+                    <h3>🏆 Difficulty Levels</h3>
+                    <ul>
+                        <li><strong>3×3 Grid:</strong> Perfect for learning the mechanics</li>
+                        <li><strong>5×5 Grid:</strong> Classic Lights Out experience</li>
+                        <li><strong>7×7 Grid:</strong> Expert level challenge</li>
+                    </ul>
+                </div>
+
+                <div class="help-section">
+                    <h3>🎨 Pattern Types</h3>
+                    <ul>
+                        <li><strong>Random:</strong> Computer-generated solvable patterns</li>
+                        <li><strong>Preset:</strong> Hand-crafted puzzles with known solutions</li>
+                        <li><strong>Custom:</strong> Create your own starting patterns</li>
+                    </ul>
+                </div>
+
+                <div class="help-section">
+                    <h3>💡 Tips & Strategy</h3>
+                    <ul>
+                        <li>Start from corners and edges - they have fewer neighbors</li>
+                        <li>Look for lights that can only be affected by one position</li>
+                        <li>Use the hint system when stuck</li>
+                        <li>Practice pattern recognition with smaller grids first</li>
+                        <li>Remember: every solvable pattern has a unique solution!</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-primary modal-close">Got It!</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div class="modal-overlay" id="settings-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Game Settings</h2>
+                <button class="modal-close" aria-label="Close modal">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18" />
+                        <line x1="6" y1="6" x2="18" y2="18" />
+                    </svg>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <div class="setting-group">
+                    <label class="setting-label">
+                        <span>Animation Speed</span>
+                        <select id="animation-speed" class="select-input">
+                            <option value="fast">Fast</option>
+                            <option value="normal" selected>Normal</option>
+                            <option value="slow">Slow</option>
+                            <option value="none">None</option>
+                        </select>
+                    </label>
+                </div>
+
+                <div class="setting-group">
+                    <label class="setting-label">
+                        <span>Sound Effects</span>
+                        <input type="checkbox" id="sound-effects" class="checkbox-input" checked>
+                    </label>
+                </div>
+
+                <div class="setting-group">
+                    <label class="setting-label">
+                        <span>Light Glow Effect</span>
+                        <input type="checkbox" id="glow-effects" class="checkbox-input" checked>
+                    </label>
+                </div>
+
+                <div class="setting-group">
+                    <label class="setting-label">
+                        <span>Show Move Preview</span>
+                        <input type="checkbox" id="move-preview" class="checkbox-input" checked>
+                    </label>
+                </div>
+
+                <div class="setting-group">
+                    <label class="setting-label">
+                        <span>Light Theme</span>
+                        <select id="light-theme" class="select-input">
+                            <option value="classic" selected>Classic (Yellow)</option>
+                            <option value="neon">Neon (Blue/Pink)</option>
+                            <option value="retro">Retro (Green/Amber)</option>
+                            <option value="rainbow">Rainbow (Multi-color)</option>
+                        </select>
+                    </label>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-secondary modal-close">Cancel</button>
+                <button class="btn btn-primary" id="save-settings">Save Settings</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pattern Design Modal (Custom Mode) -->
+    <div class="modal-overlay" id="design-modal">
+        <div class="modal-content modal-large">
+            <div class="modal-header">
+                <h2>Design Custom Pattern</h2>
+                <button class="modal-close" aria-label="Close modal">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18" />
+                        <line x1="6" y1="6" x2="18" y2="18" />
+                    </svg>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <p>Click lights to create your starting pattern, then try to solve it!</p>
+                <div class="design-grid" id="design-grid">
+                    <!-- Design grid will be generated dynamically -->
+                </div>
+
+                <div class="design-info">
+                    <p><strong>Tip:</strong> Not all patterns are solvable. The game will verify if your pattern has a
+                        solution.</p>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-secondary modal-close">Cancel</button>
+                <button class="btn btn-outline" id="clear-design">Clear All</button>
+                <button class="btn btn-primary" id="play-design">Play This Pattern</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="../js/utils.js"></script>
+    <script src="../js/games/lights-out.js"></script>
+</body>
+
+</html>

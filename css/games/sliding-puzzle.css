@@ -1,0 +1,692 @@
+/* ===== SLIDING PUZZLE STYLES ===== */
+
+/* CSS Variable Mappings */
+:root {
+  --surface-color: var(--surface, #ffffff);
+  --background-color: var(--background, #f8f9fa);
+  --text-primary: var(--text-primary, #2d3436);
+  --text-secondary: var(--text-secondary, #636e72);
+  --border-color: var(--border, #e9ecef);
+  --primary-color: var(--primary, #667eea);
+  --primary-color-alpha: rgba(102, 126, 234, 0.1);
+  --success-color: var(--success, #00b894);
+  --warning-color: var(--warning, #fdcb6e);
+  --danger-color: var(--error, #e17055);
+  --info-color: var(--primary, #667eea);
+  --warning-color-alpha: rgba(253, 203, 110, 0.1);
+  --info-color-alpha: rgba(102, 126, 234, 0.1);
+  --border-radius: 6px;
+  --border-radius-lg: 12px;
+  --animation-duration: 0.3s;
+  --font-mono: 'JetBrains Mono', 'Consolas', monospace;
+}
+
+/* Game Page Layout */
+.game-page {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  font-family: var(--font-primary, 'Inter', sans-serif);
+}
+
+.game-header {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 1rem 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.game-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.nav-back {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: white;
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  transition: background 0.2s;
+}
+
+.nav-back:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.nav-back svg {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.game-title h1 {
+  color: white;
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.game-title p {
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0;
+  font-size: 0.875rem;
+}
+
+.game-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.btn-icon {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: white;
+  padding: 0.5rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-icon:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.btn-icon svg {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.game-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+  position: relative;
+  z-index: 1;
+}
+
+/* Basic Button Styles (Fallback) */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: var(--primary-color);
+  color: white;
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.btn-outline {
+  background: transparent;
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.btn svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+/* Modal Styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+}
+
+.modal-content {
+  background: white;
+  border-radius: 12px;
+  max-width: 500px;
+  width: 100%;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.modal-header h2 {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 4px;
+  color: #636e72;
+}
+
+.modal-close:hover {
+  background: #f1f3f4;
+}
+
+.modal-close svg {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.modal-body {
+  padding: 1.5rem;
+}
+
+.modal-footer {
+  padding: 1.5rem;
+  border-top: 1px solid #e9ecef;
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+}
+
+/* Game Controls & Layout */
+.game-controls {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  background: var(--surface-color);
+  border-radius: var(--border-radius-lg);
+  border: 1px solid var(--border-color);
+}
+
+.control-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.control-group label {
+  font-weight: 500;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+}
+
+.select-input {
+  padding: 0.75rem;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  background: var(--background-color);
+  color: var(--text-primary);
+  font-size: 0.875rem;
+  transition: border-color 0.2s;
+}
+
+.select-input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px var(--primary-color-alpha);
+}
+
+.control-group .btn {
+  margin-top: 0.5rem;
+}
+
+/* Game Statistics */
+.game-stats {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-bottom: 2rem;
+  padding: 1rem;
+  background: var(--surface-color);
+  border-radius: var(--border-radius-lg);
+  border: 1px solid var(--border-color);
+}
+
+.stat-item {
+  text-align: center;
+}
+
+.stat-label {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 0.25rem;
+}
+
+.stat-value {
+  display: block;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--primary-color);
+  font-family: var(--font-mono);
+}
+
+/* Image Upload Section */
+.image-upload {
+  margin-bottom: 2rem;
+}
+
+.upload-zone {
+  border: 2px dashed var(--border-color);
+  border-radius: var(--border-radius-lg);
+  padding: 3rem 2rem;
+  text-align: center;
+  background: var(--surface-color);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.upload-zone:hover,
+.upload-zone.dragover {
+  border-color: var(--primary-color);
+  background: var(--primary-color-alpha);
+}
+
+.upload-content svg {
+  width: 3rem;
+  height: 3rem;
+  color: var(--text-secondary);
+  margin-bottom: 1rem;
+}
+
+.upload-content p {
+  font-size: 1rem;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.link-btn {
+  background: none;
+  border: none;
+  color: var(--primary-color);
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.upload-content small {
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+}
+
+.image-preview {
+  position: relative;
+  display: inline-block;
+  margin-top: 1rem;
+}
+
+.image-preview img {
+  width: 200px;
+  height: 200px;
+  object-fit: cover;
+  border-radius: var(--border-radius);
+  border: 2px solid var(--border-color);
+}
+
+.image-preview .btn-danger {
+  position: absolute;
+  top: -0.5rem;
+  right: -0.5rem;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  border-radius: 50%;
+  background: var(--danger-color);
+  color: white;
+  border: 2px solid var(--background-color);
+}
+
+/* Game Board Container */
+.game-board-container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+
+.puzzle-board {
+  position: relative;
+  display: grid;
+  gap: 2px;
+  background: var(--border-color, #ddd);
+  border-radius: var(--border-radius-lg, 8px);
+  padding: 2px;
+  max-width: min(90vw, 500px);
+  aspect-ratio: 1;
+  width: 100%;
+  min-height: 300px; /* Ensure minimum visibility */
+  border: 2px solid #333; /* Debug border to make it visible */
+}
+
+/* Dynamic grid sizing */
+.puzzle-board.size-3 { grid-template-columns: repeat(3, 1fr); }
+.puzzle-board.size-4 { grid-template-columns: repeat(4, 1fr); }
+.puzzle-board.size-5 { grid-template-columns: repeat(5, 1fr); }
+
+/* Puzzle Tiles */
+.puzzle-tile {
+  position: relative;
+  background: var(--surface-color, #f0f0f0);
+  border-radius: var(--border-radius, 4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: clamp(1rem, 4vw, 2rem);
+  font-weight: 700;
+  color: var(--text-primary, #333);
+  cursor: pointer;
+  transition: all var(--animation-duration, 0.3s) ease;
+  overflow: hidden;
+  user-select: none;
+  aspect-ratio: 1;
+  border: 1px solid #ccc; /* Debug border */
+  min-height: 60px; /* Ensure minimum visibility */
+}
+
+.puzzle-tile:not(.empty):hover {
+  background: var(--primary-color-alpha);
+  transform: scale(0.98);
+}
+
+.puzzle-tile.moveable {
+  box-shadow: 0 0 0 2px var(--primary-color);
+  cursor: pointer;
+}
+
+.puzzle-tile.moving {
+  transition: transform var(--animation-duration) ease-out;
+  z-index: 10;
+}
+
+.puzzle-tile.empty {
+  background: transparent;
+  cursor: default;
+}
+
+/* Image mode tiles */
+.puzzle-tile.image-tile {
+  background-repeat: no-repeat !important;
+  font-size: 0; /* Hide number in image mode */
+  background-color: transparent !important; /* Override base background */
+  /* background-size and background-position set by JavaScript for proper tiling */
+}
+
+.puzzle-tile.image-tile::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.1);
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.puzzle-tile.image-tile:hover::after {
+  opacity: 1;
+}
+
+/* Tile numbers in corner for image mode */
+.puzzle-tile.image-tile .tile-number {
+  position: absolute;
+  top: 0.25rem;
+  left: 0.25rem;
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  font-size: 0.7rem;
+  padding: 0.1rem 0.3rem;
+  border-radius: 0.25rem;
+  font-weight: 600;
+}
+
+/* Board Overlay */
+.board-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--border-radius-lg);
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+}
+
+.board-overlay.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+.overlay-content {
+  text-align: center;
+  color: white;
+}
+
+.success-animation {
+  animation: successBounce 0.6s ease-out;
+}
+
+@keyframes successBounce {
+  0% { transform: scale(0.5); opacity: 0; }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.success-icon {
+  width: 4rem;
+  height: 4rem;
+  background: var(--success-color);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1rem;
+  animation: successPulse 2s infinite;
+}
+
+@keyframes successPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+
+.success-icon svg {
+  width: 2rem;
+  height: 2rem;
+  color: white;
+}
+
+/* Bottom Action Buttons */
+.game-actions-bottom {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .game-controls {
+    grid-template-columns: 1fr;
+    padding: 1rem;
+  }
+  
+  .game-stats {
+    gap: 1rem;
+    padding: 0.75rem;
+  }
+  
+  .stat-value {
+    font-size: 1.25rem;
+  }
+  
+  .puzzle-board {
+    max-width: 95vw;
+    gap: 1px;
+    padding: 1px;
+  }
+  
+  .puzzle-tile {
+    font-size: clamp(0.8rem, 6vw, 1.5rem);
+  }
+  
+  .game-actions-bottom {
+    gap: 0.5rem;
+  }
+  
+  .game-actions-bottom .btn {
+    padding: 0.75rem 1rem;
+    font-size: 0.875rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .game-stats {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .stat-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .stat-label,
+  .stat-value {
+    display: inline;
+    margin: 0;
+  }
+  
+  .upload-zone {
+    padding: 2rem 1rem;
+  }
+  
+  .image-preview img {
+    width: 150px;
+    height: 150px;
+  }
+}
+
+/* Animation Utilities */
+.slide-animation {
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.slide-fast {
+  transition: transform 0.15s ease-out;
+}
+
+.slide-slow {
+  transition: transform 0.6s ease-out;
+}
+
+.no-animation {
+  transition: none !important;
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .puzzle-tile,
+  .slide-animation,
+  .slide-fast,
+  .slide-slow,
+  .success-animation,
+  .success-icon {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+  .puzzle-tile {
+    border: 2px solid var(--text-primary);
+  }
+  
+  .puzzle-tile.moveable {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 4px var(--primary-color);
+  }
+}
+
+/* Touch-specific styles */
+@media (hover: none) and (pointer: coarse) {
+  .puzzle-tile:not(.empty) {
+    transition: transform 0.1s ease;
+  }
+  
+  .puzzle-tile:not(.empty):active {
+    transform: scale(0.95);
+  }
+}
+
+/* Game completion effects */
+.puzzle-board.completed .puzzle-tile {
+  animation: completionCelebration 0.5s ease-out;
+  animation-delay: calc(var(--tile-index, 0) * 0.05s);
+}
+
+@keyframes completionCelebration {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+/* Hint highlighting */
+.puzzle-tile.hint-tile {
+  background: var(--warning-color-alpha) !important;
+  box-shadow: 0 0 0 2px var(--warning-color) !important;
+  animation: hintPulse 1s ease-in-out 3;
+}
+
+@keyframes hintPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+/* Solving animation */
+.puzzle-board.auto-solving .puzzle-tile {
+  pointer-events: none;
+}
+
+.auto-solving .puzzle-tile.solving-move {
+  background: var(--info-color-alpha) !important;
+  transform: scale(0.9);
+}

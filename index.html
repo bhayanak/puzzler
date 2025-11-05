@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Modern puzzle collection featuring Tower of Hanoi and other engaging brain games">
+    <meta name="theme-color" content="#667eea">
+
+    <title>Puzzle Collection - Brain Training Games</title>
+
+    <!-- Preconnect to optimize font loading -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/components.css">
+
+    <!-- Favicon -->
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧩</text></svg>">
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="container">
+                <div class="header-content">
+                    <div class="logo">
+                        <h1>🧩 Puzzle Collection</h1>
+                        <p class="tagline">Train your brain with engaging puzzles</p>
+                    </div>
+                    <nav class="main-nav">
+                        <button class="nav-toggle" aria-label="Toggle navigation">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </button>
+                        <ul class="nav-menu">
+                            <li><a href="#home" class="nav-link active">Home</a></li>
+                            <li><a href="#games" class="nav-link">Games</a></li>
+                            <li><a href="#stats" class="nav-link">Stats</a></li>
+                            <li><a href="javascript:void(0)" class="nav-link"
+                                    onclick="showFooterModal('settings')">Settings</a></li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="container">
+                <!-- Hero Section -->
+                <section id="home" class="hero-section">
+                    <div class="hero-content">
+                        <h2 class="hero-title">Welcome to Puzzle Paradise!</h2>
+                        <p class="hero-description">
+                            Challenge your mind with our collection of classic and modern puzzles.
+                            Start with the legendary Tower of Hanoi and expand your puzzle-solving skills!
+                        </p>
+                        <div class="hero-actions">
+                            <a href="#games" class="btn btn-primary">Start Playing</a>
+                            <a href="javascript:void(0)" class="btn btn-secondary"
+                                onclick="showFooterModal('about')">Learn More</a>
+                        </div>
+                    </div>
+                    <div class="hero-visual">
+                        <div class="puzzle-preview">
+                            <!-- Animated preview of Tower of Hanoi -->
+                            <div class="mini-tower">
+                                <div class="tower-base"></div>
+                                <div class="tower-pole"></div>
+                                <div class="mini-disk disk-1"></div>
+                                <div class="mini-disk disk-2"></div>
+                                <div class="mini-disk disk-3"></div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Games Grid -->
+                <section id="games" class="games-section">
+                    <div class="section-header">
+                        <h2 class="section-title">Choose Your Challenge</h2>
+                        <p class="section-description">Select a puzzle to begin your mental workout</p>
+                    </div>
+
+                    <div class="games-grid">
+                        <!-- Tower of Hanoi Game Card -->
+                        <div class="game-card featured">
+                            <div class="game-card-header">
+                                <div class="game-icon">🗼</div>
+                                <div class="game-status">
+                                    <span class="status-badge available">Available</span>
+                                </div>
+                            </div>
+                            <div class="game-card-content">
+                                <h3 class="game-title">Tower of Hanoi</h3>
+                                <p class="game-description">
+                                    The classic puzzle that has challenged minds for centuries.
+                                    Move all disks from one tower to another following simple rules.
+                                </p>
+                                <div class="game-stats">
+                                    <div class="stat">
+                                        <span class="stat-label">Difficulty:</span>
+                                        <span class="stat-value">★★★☆☆</span>
+                                    </div>
+                                    <div class="stat">
+                                        <span class="stat-label">Best Time:</span>
+                                        <span class="stat-value" id="tower-of-hanoi-best-time">--:--</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="game-card-actions">
+                                <button class="btn btn-primary" onclick="startGame('tower-of-hanoi')">
+                                    Play Now
+                                </button>
+                                <button class="btn btn-outline" onclick="showGameInfo('tower-of-hanoi')">
+                                    Learn Rules
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Sliding Puzzle Game -->
+                        <div class="game-card">
+                            <div class="game-card-header">
+                                <div class="game-icon">🧩</div>
+                                <div class="game-status">
+                                    <span class="status-badge new">Available</span>
+                                </div>
+                            </div>
+                            <div class="game-card-content">
+                                <h3 class="game-title">Sliding Puzzle</h3>
+                                <p class="game-description">
+                                    Arrange numbered tiles or custom images by sliding them into the empty space.
+                                    Multiple board sizes and difficulty levels available.
+                                </p>
+                                <div class="game-stats">
+                                    <div class="stat">
+                                        <span class="stat-label">Difficulty:</span>
+                                        <span class="stat-value">★★☆☆☆</span>
+                                    </div>
+                                    <div class="stat">
+                                        <span class="stat-label">Best Moves:</span>
+                                        <span class="stat-value" id="sliding-puzzle-best-moves">--</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="game-card-actions">
+                                <button class="btn btn-primary" onclick="startGame('sliding-puzzle')">
+                                    Play Now
+                                </button>
+                                <button class="btn btn-outline" onclick="showGameInfo('sliding-puzzle')">
+                                    Learn Rules
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="game-card">
+                            <div class="game-card-header">
+                                <div class="game-icon">💡</div>
+                                <div class="game-status">
+                                    <span class="status-badge new">New!</span>
+                                </div>
+                            </div>
+                            <div class="game-card-content">
+                                <h3 class="game-title">Lights Out</h3>
+                                <p class="game-description">
+                                    Turn off all the lights! Each click toggles a light and its neighbors.
+                                    A deceptively challenging puzzle with beautiful visual effects.
+                                </p>
+                                <div class="game-stats">
+                                    <div class="stat">
+                                        <span class="stat-label">Difficulty:</span>
+                                        <span class="stat-value">★★★★☆</span>
+                                    </div>
+                                    <div class="stat">
+                                        <span class="stat-label">Best Time:</span>
+                                        <span class="stat-value" id="lights-out-best-time">--:--</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="game-card-actions">
+                                <button class="btn btn-primary" onclick="startGame('lights-out')">
+                                    Play Now
+                                </button>
+                                <button class="btn btn-outline" onclick="showGameInfo('lights-out')">
+                                    Learn Rules
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="game-card">
+                            <div class="game-card-header">
+                                <div class="game-icon">🔢</div>
+                                <div class="game-status">
+                                    <span class="status-badge new">New!</span>
+                                </div>
+                            </div>
+                            <div class="game-card-content">
+                                <h3 class="game-title">Sudoku</h3>
+                                <p class="game-description">
+                                    Fill the 9×9 grid with digits so that each column, row,
+                                    and 3×3 section contains all numbers from 1 to 9.
+                                </p>
+                                <div class="game-stats">
+                                    <div class="stat">
+                                        <span class="stat-label">Difficulty:</span>
+                                        <span class="stat-value">★★★☆☆</span>
+                                    </div>
+                                    <div class="stat">
+                                        <span class="stat-label">Best Time:</span>
+                                        <span class="stat-value" id="sudoku-best-time">--:--</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="game-card-actions">
+                                <button class="btn btn-primary" onclick="startGame('sudoku')">
+                                    Play Now
+                                </button>
+                                <button class="btn btn-outline" onclick="showGameInfo('sudoku')">
+                                    Learn Rules
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Stats Section -->
+                <section id="stats" class="stats-section">
+                    <div class="section-header">
+                        <h2 class="section-title">Your Progress</h2>
+                        <p class="section-description">Track your puzzle-solving achievements</p>
+                    </div>
+
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon">🏆</div>
+                            <div class="stat-content">
+                                <div class="stat-number" id="total-games">0</div>
+                                <div class="stat-label">Games Completed</div>
+                            </div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="stat-icon">⚡</div>
+                            <div class="stat-content">
+                                <div class="stat-number" id="best-time">--:--</div>
+                                <div class="stat-label">Best Time</div>
+                            </div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="stat-icon">🎯</div>
+                            <div class="stat-content">
+                                <div class="stat-number" id="efficiency">0%</div>
+                                <div class="stat-label">Efficiency</div>
+                            </div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="stat-icon">🔥</div>
+                            <div class="stat-content">
+                                <div class="stat-number" id="streak">0</div>
+                                <div class="stat-label">Win Streak</div>
+                            </div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="stat-icon">⏱️</div>
+                            <div class="stat-content">
+                                <div class="stat-number" id="total-time">00:00</div>
+                                <div class="stat-label">Total Time</div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="app-footer">
+            <div class="container">
+                <div class="footer-content">
+                    <p>&copy; 2025 Puzzle Collection. Made with ❤️ for puzzle enthusiasts.</p>
+                    <div class="footer-links">
+                        <a href="javascript:void(0)" onclick="showFooterModal('about')">About</a>
+                        <a href="javascript:void(0)" onclick="showFooterModal('privacy')">Privacy</a>
+                        <a href="javascript:void(0)" onclick="showFooterModal('contact')">Contact</a>
+                        <a href="javascript:void(0)" onclick="showFooterModal('settings')">Settings</a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Game Info Modal -->
+    <div id="game-info-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal-title">Game Rules</h3>
+                <button class="modal-close" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body" id="modal-body">
+                <!-- Game rules will be inserted here -->
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" onclick="closeModal()">Got it!</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Modals -->
+    <div id="footer-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="footer-modal-title">Information</h3>
+                <button class="modal-close" onclick="closeFooterModal()">&times;</button>
+            </div>
+            <div class="modal-body" id="footer-modal-body">
+                <!-- Content will be inserted here -->
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" onclick="closeFooterModal()">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" class="loading-overlay">
+        <div class="loading-spinner"></div>
+        <div class="loading-text">Loading your puzzle...</div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/utils.js"></script>
+    <script src="js/app.js"></script>
+</body>
+
+</html>
