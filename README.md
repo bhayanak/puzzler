@@ -1,4 +1,4 @@
-# 🧩 Puzzle Collection - Tower of Hanoi
+# 🧩 Puzzle Collection
 
 A modern, mobile-responsive puzzle game collection featuring the classic Tower of Hanoi with beautiful animations and intuitive controls.
 
