@@ -41,6 +41,35 @@ show_usage() {
     echo "Examples:"
     echo "  $0 https://github.com/bhayanak/puzzler.git"
     echo "  $0 https://github.com/bhayanak/puzzler.git ../my-other-project"
+    echo ""
+    echo "Note: Make sure you're authenticated with the correct GitHub account before running this script."
+    echo "      You can check with: gh auth status"
+    echo "      Login if needed: gh auth login"
+}
+
+# Function to check GitHub authentication
+check_github_auth() {
+    local repo_url="$1"
+    local repo_owner=$(echo "$repo_url" | sed -n 's|.*github\.com[/:]\([^/]*\)/.*|\1|p')
+    
+    if command -v gh >/dev/null 2>&1; then
+        print_info "Checking GitHub authentication..."
+        local current_user=$(gh auth status 2>&1 | grep -o "Logged in to github.com as [^ ]*" | cut -d' ' -f6 || echo "unknown")
+        
+        if [[ "$current_user" != "unknown" ]]; then
+            if [[ "$current_user" == "$repo_owner" ]]; then
+                print_success "Authenticated as $current_user (matches repository owner)"
+            else
+                print_warning "Authenticated as $current_user but repository owner is $repo_owner"
+                echo "This might cause push permission issues."
+            fi
+        else
+            print_warning "GitHub authentication status unclear"
+        fi
+    else
+        print_warning "GitHub CLI (gh) not found. Cannot verify authentication."
+        print_info "Consider installing it: brew install gh"
+    fi
 }
 
 # Check if help was requested
@@ -66,6 +95,9 @@ PROJECT_NAME=$(basename "$CURRENT_DIR")
 print_info "Setting up GitHub repository for project: $PROJECT_NAME"
 print_info "New repository URL: $NEW_REPO_URL"
 print_info "Reference repository: $REFERENCE_REPO_PATH"
+
+# Check GitHub authentication
+check_github_auth "$NEW_REPO_URL"
 
 # Check if already a git repository
 if [[ -d ".git" ]]; then
@@ -103,9 +135,47 @@ EMAIL=$(git config user.email)
 
 print_info "Using git user: $USERNAME <$EMAIL>"
 
-# Update remote URL
-print_info "Updating remote URL to: $NEW_REPO_URL"
-git remote set-url origin "$NEW_REPO_URL"
+# Extract authentication details from reference repository
+REF_REMOTE_URL=$(git config --file "$REFERENCE_REPO_PATH/.git/config" remote.origin.url)
+REPO_NAME=$(basename "$NEW_REPO_URL" .git)
+
+# Check if reference repo uses authentication token
+if [[ "$REF_REMOTE_URL" =~ https://([^:]+):([^@]+)@github\.com/ ]]; then
+    REF_USERNAME="${BASH_REMATCH[1]}"
+    REF_TOKEN="${BASH_REMATCH[2]}"
+    
+    # Create authenticated URL for new repository
+    if [[ "$NEW_REPO_URL" =~ https://github\.com/([^/]+)/(.+) ]]; then
+        NEW_OWNER="${BASH_REMATCH[1]}"
+        NEW_REPO="${BASH_REMATCH[2]}"
+        AUTHENTICATED_URL="https://${REF_USERNAME}:${REF_TOKEN}@github.com/${NEW_OWNER}/${NEW_REPO}"
+        
+        print_info "Using authenticated URL with token from reference repository"
+        git remote set-url origin "$AUTHENTICATED_URL"
+        print_success "Remote URL updated with authentication"
+    else
+        print_warning "Could not parse new repository URL format"
+        git remote set-url origin "$NEW_REPO_URL"
+    fi
+else
+    print_info "Reference repository doesn't use token authentication, using provided URL"
+    git remote set-url origin "$NEW_REPO_URL"
+fi
+
+# Check if user wants to switch to SSH for authentication
+if [[ "$NEW_REPO_URL" == https://github.com/* ]]; then
+    SSH_URL=$(echo "$NEW_REPO_URL" | sed 's|https://github.com/|git@github.com:|')
+    echo ""
+    print_info "Option: You can use SSH instead of HTTPS for authentication"
+    print_info "SSH URL would be: $SSH_URL"
+    read -p "Do you want to use SSH instead of HTTPS? (y/N): " -n 1 -r
+    echo
+    if [[ $REPLY =~ ^[Yy]$ ]]; then
+        print_info "Switching to SSH URL..."
+        git remote set-url origin "$SSH_URL"
+        NEW_REPO_URL="$SSH_URL"
+    fi
+fi
 
 # Create .gitignore to exclude markdown files
 print_info "Creating .gitignore to exclude markdown files..."
@@ -163,15 +233,39 @@ if [[ ! $REPLY =~ ^[Nn]$ ]]; then
     
     print_success "Files committed successfully!"
     
+    # Set up main branch properly
+    print_info "Setting up main branch..."
+    git branch -M main
+    
     # Ask about pushing to remote
     echo ""
     read -p "Do you want to push to the remote repository? (Y/n): " -n 1 -r
     echo
     if [[ ! $REPLY =~ ^[Nn]$ ]]; then
         print_info "Pushing to remote repository..."
-        git branch -M main
-        git push -u origin main
-        print_success "Successfully pushed to remote repository!"
+        
+        # Try to push and handle authentication errors gracefully
+        if git push -u origin main; then
+            print_success "Successfully pushed to remote repository!"
+        else
+            print_error "Failed to push to remote repository!"
+            echo ""
+            print_info "This might be due to authentication issues. Here are some solutions:"
+            echo ""
+            echo "1. Check if you're logged into the correct GitHub account:"
+            echo "   gh auth status"
+            echo ""
+            echo "2. Login to the correct GitHub account:"
+            echo "   gh auth login"
+            echo ""
+            echo "3. Or update the remote URL to use SSH instead of HTTPS:"
+            echo "   git remote set-url origin git@github.com:bhayanak/puzzler.git"
+            echo ""
+            echo "4. Or manually push later:"
+            echo "   git push -u origin main"
+            echo ""
+            print_warning "Repository is set up locally but not pushed to remote yet."
+        fi
     else
         print_info "You can push later using: git push -u origin main"
     fi
