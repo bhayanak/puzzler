@@ -116,24 +116,62 @@ class TowerOfHanoi {
 
   setupTouchControls() {
     let touchStartPos = null;
+    let touchTarget = null;
     
     document.addEventListener('touchstart', (e) => {
-      touchStartPos = Utils.getTouchPosition(e);
-    });
+      if (e.target.closest('.game-board')) {
+        touchStartPos = Utils.getTouchPosition(e);
+        touchTarget = e.target;
+        // Prevent default to avoid ghost clicks
+        e.preventDefault();
+      }
+    }, { passive: false });
 
     document.addEventListener('touchend', (e) => {
-      if (!touchStartPos) return;
+      if (!touchStartPos || !touchTarget) return;
       
       const touchEndPos = Utils.getTouchPosition(e);
       const distance = Utils.getDistance(touchStartPos, touchEndPos);
       
       // If it's a tap (not a swipe)
-      if (distance < 10) {
-        // Handle as click
-        e.target.click();
+      if (distance < 15) {
+        // Handle touch directly without simulating click
+        this.handleTouchTap(touchTarget);
       }
       
       touchStartPos = null;
+      touchTarget = null;
+    });
+
+    // Prevent context menu on touch devices
+    document.addEventListener('touchmove', (e) => {
+      if (e.target.closest('.game-board')) {
+        e.preventDefault();
+      }
+    }, { passive: false });
+  }
+
+  handleTouchTap(target) {
+    if (this.isPaused || this.isGameComplete) return;
+
+    // Clear any existing selection visual artifacts
+    this.clearSelectionArtifacts();
+
+    if (target.closest('.tower')) {
+      const tower = target.closest('.tower');
+      const towerIndex = parseInt(tower.dataset.tower);
+      this.handleTowerClick(towerIndex);
+    } else if (target.closest('.disk')) {
+      const disk = target.closest('.disk');
+      const diskSize = parseInt(disk.dataset.size);
+      this.handleDiskClick(diskSize);
+    }
+  }
+
+  clearSelectionArtifacts() {
+    // Remove any stray selection classes that might persist
+    Utils.$$('.disk.selected').forEach(disk => {
+      disk.classList.remove('selected');
     });
   }
 
@@ -278,14 +316,12 @@ class TowerOfHanoi {
     this.selectedDisk = diskSize;
     this.selectedTower = towerIndex;
     
-    // Update visual selection
-    const diskElement = Utils.$(`[data-size="${diskSize}"]`);
-    if (diskElement) {
-      diskElement.classList.add('selected');
-    }
+    // Update visual selection with proper cleanup
+    this.updateSelectionVisuals();
   }
 
   deselectDisk() {
+    // Remove selection from currently selected disk
     if (this.selectedDisk !== null) {
       const diskElement = Utils.$(`[data-size="${this.selectedDisk}"]`);
       if (diskElement) {
@@ -293,8 +329,31 @@ class TowerOfHanoi {
       }
     }
     
+    // Clear all selection artifacts - sometimes multiple elements might have selection class
+    Utils.$$('.disk.selected').forEach(disk => {
+      disk.classList.remove('selected');
+    });
+
+    // Reset selection state
     this.selectedDisk = null;
     this.selectedTower = null;
+
+    // Force a visual refresh to ensure selection is cleared
+    requestAnimationFrame(() => {
+      this.updateSelectionVisuals();
+    });
+  }
+
+  updateSelectionVisuals() {
+    // Ensure only the currently selected disk (if any) has the selected class
+    Utils.$$('.disk').forEach(disk => {
+      const diskSize = parseInt(disk.dataset.size);
+      if (diskSize === this.selectedDisk) {
+        disk.classList.add('selected');
+      } else {
+        disk.classList.remove('selected');
+      }
+    });
   }
 
   attemptMove(fromTower, toTower) {
@@ -352,8 +411,8 @@ class TowerOfHanoi {
     // Animate the move
     this.animateMove(disk, fromTowerIndex, toTowerIndex);
     
-    // Update game state
-    this.deselectDisk();
+    // Update game state - ensure complete deselection
+    this.forceDeselectAll();
     this.updateStats();
     this.updateUIControls();
     
@@ -365,6 +424,25 @@ class TowerOfHanoi {
         this.showMessage(`✅ Moved disk ${disk}. Moves: ${this.moves}/${this.optimalMoves}`);
       }
     }, 100);
+  }
+
+  forceDeselectAll() {
+    // Aggressively clear all selection state and visuals
+    this.selectedDisk = null;
+    this.selectedTower = null;
+
+    // Remove all selection classes immediately
+    Utils.$$('.disk').forEach(disk => {
+      disk.classList.remove('selected');
+    });
+
+    // Also clear any potential aria-selected attributes
+    Utils.$$('.disk[aria-selected="true"]').forEach(disk => {
+      disk.removeAttribute('aria-selected');
+    });
+
+    // Force a repaint to ensure changes are applied
+    this.clearSelectionArtifacts();
   }
 
   animateMove(diskSize, fromTowerIndex, toTowerIndex) {
