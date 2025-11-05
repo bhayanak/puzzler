@@ -674,8 +674,7 @@ class PuzzleApp {
             <h4>Contact Information</h4>
             <div class="contact-info">
               <p><strong>📧 Email:</strong> <a href="mailto:info@puzzlehub.com">info@puzzlehub.com</a></p>
-              <p><strong>🐙 GitHub:</strong> <a href="https://github.com/puzzlehub" target="_blank">github.com/puzzlehub</a></p>
-              <p><strong>🐦 Twitter:</strong> <a href="https://twitter.com/puzzlehub" target="_blank">@puzzlehub</a></p>
+              <p><strong>🐙 GitHub:</strong> <a href="https://github.com/bhayanak/puzzler" target="_blank">github.com/puzzlehub</a></p>
             </div>
             
             <h4>Feedback & Suggestions</h4>
