@@ -26,6 +26,8 @@ class LightsOutGame {
         this.setupUI();
         this.setupBoard();
         this.updateUI();
+        // Start the game after initialization
+        this.startGame();
     }
 
     setupUI() {
@@ -98,6 +100,20 @@ class LightsOutGame {
         
         // Apply initial pattern
         this.applyPattern(this.currentPattern);
+        // Ensure at least one light is on for playability
+        if (this.lights.flat().every(light => !light)) {
+            // If all lights are off, turn on the center light
+            const center = Math.floor(size / 2);
+            this.lights[center][center] = true;
+            this.updateLightCell(center, center);
+        }
+        // Ensure at least one light is on for playability
+        if (this.lights.flat().every(light => !light)) {
+            // If all lights are off, turn on the center light
+            const center = Math.floor(size / 2);
+            this.lights[center][center] = true;
+            this.updateLightCell(center, center);
+        }
     }
 
     bindEvents() {
@@ -276,17 +292,51 @@ class LightsOutGame {
     }
 
     handleGameWin() {
+        console.log('🎉 Game won! All lights are out!');
         this.gameActive = false;
         this.stopTimer();
         
         // Update statistics
         this.updateStatistics();
         
+        // Show success message
+        this.showGameWinMessage();
+
         // Show success animation
         this.showSuccessOverlay();
         
         // Play win sound (if enabled)
         this.playWinSound();
+    }
+
+    showGameWinMessage() {
+        const time = this.getElapsedTime();
+        const message = `🎉 Congratulations! You've turned off all the lights!\n\n⏱️ Time: ${this.formatTime(time)}\n🎯 Moves: ${this.moves}\n\nWell done!`;
+
+        // Success overlay will handle the display now
+        // No need for alert popup
+
+        // Try to show in a modal if it exists
+        const modalTitle = document.getElementById('footer-modal-title');
+        const modalBody = document.getElementById('footer-modal-body');
+        const modal = document.getElementById('footer-modal');
+
+        if (modalTitle && modalBody && modal) {
+            modalTitle.textContent = 'Game Complete!';
+            modalBody.innerHTML = `
+                <div style="text-align: center; padding: 2rem;">
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">🎉</div>
+                    <h3>Congratulations!</h3>
+                    <p>You've successfully turned off all the lights!</p>
+                    <div style="margin: 1.5rem 0;">
+                        <div><strong>⏱️ Time:</strong> ${this.formatTime(time)}</div>
+                        <div><strong>🎯 Moves:</strong> ${this.moves}</div>
+                    </div>
+                    <p>Well done!</p>
+                </div>
+            `;
+            modal.classList.add('show');
+        }
     }
 
     // Game Control Methods
@@ -315,10 +365,11 @@ class LightsOutGame {
     }
 
     startGame() {
-        console.log('🎯 Starting Lights Out game...');
         this.gameActive = true;
+        this.moves = 0;
+        this.startTime = Date.now();
         this.startTimer();
-        console.log('✅ Game is now active, lights should be clickable');
+        this.updateUI();
     }
 
     // Pattern System
@@ -736,7 +787,7 @@ class LightsOutGame {
         
         // Update statistics  
         const stats = this.loadStatistics();
-        const currentDifficulty = this.gridSize.toString();
+        const currentDifficulty = this.settings.gridSize.toString();
         
         const gamesPlayedEl = document.getElementById('gamesPlayed');
         if (gamesPlayedEl) gamesPlayedEl.textContent = stats.gamesPlayed.toString();
@@ -799,12 +850,11 @@ class LightsOutGame {
         return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
     }
 
-    // Theme and Settings
     changeGridSize(size) {
         this.settings.gridSize = size;
         this.saveSettings();
         this.setupBoard();
-        this.updateUI();
+        this.newGame();
     }
 
     changeTheme(theme) {
@@ -953,21 +1003,47 @@ class LightsOutGame {
 
     // Success Overlay
     showSuccessOverlay() {
-        const overlay = document.querySelector('.board-overlay');
-        if (!overlay) return;
-        
+        // Add victory animation to the game board
+        if (this.gameBoard) {
+            this.gameBoard.classList.add('game-complete');
+
+            // Animate all light cells
+            const cells = this.gameBoard.querySelectorAll('.light-cell');
+            cells.forEach((cell, index) => {
+                setTimeout(() => {
+                    cell.style.animation = 'victoryPulse 0.5s ease-in-out';
+                }, index * 50);
+            });
+        }
+
+        // Calculate game statistics
         const time = this.getElapsedTime();
-        
-        const successTimeEl = document.querySelector('.success-time');
-        if (successTimeEl) successTimeEl.textContent = this.formatTime(time);
-        
-        const successMovesEl = document.querySelector('.success-moves');
-        if (successMovesEl) successMovesEl.textContent = this.moves.toString();
-        
-        overlay.classList.add('show');
-        
-        const successAnimationEl = document.querySelector('.success-animation');
-        if (successAnimationEl) successAnimationEl.classList.add('success-animation');
+        const timeFormatted = this.formatTime(time);
+        const moves = this.moves;
+
+        // Calculate efficiency (lower moves = higher efficiency)
+        const optimalMoves = Math.ceil(this.settings.gridSize * this.settings.gridSize * 0.5); // Rough estimate
+        const efficiency = Math.max(0, Math.min(100, Math.round((optimalMoves / moves) * 100)));
+        const efficiencyDisplay = efficiency > 90 ? '⭐⭐⭐' : efficiency > 70 ? '⭐⭐' : efficiency > 50 ? '⭐' : 'OK';
+
+        // Update success modal content
+        const successTimeEl = document.getElementById('success-time');
+        if (successTimeEl) successTimeEl.textContent = timeFormatted;
+
+        const successMovesEl = document.getElementById('success-moves');
+        if (successMovesEl) successMovesEl.textContent = moves.toString();
+
+        const successEfficiencyEl = document.getElementById('success-efficiency');
+        if (successEfficiencyEl) successEfficiencyEl.textContent = efficiencyDisplay;
+
+        // Show the overlay
+        const overlay = document.getElementById('board-overlay');
+        if (overlay) {
+            overlay.classList.add('show');
+        }
+
+        // Update statistics
+        this.updateStatistics(time, moves);
     }
 
     hideSuccessOverlay() {
@@ -1008,7 +1084,7 @@ class LightsOutGame {
     updateStatistics() {
         const stats = this.loadStatistics();
         const time = this.getElapsedTime();
-        const currentDifficulty = this.gridSize.toString();
+        const currentDifficulty = this.settings.gridSize.toString();
         
         stats.gamesPlayed++;
         stats.gamesWon++;

@@ -140,14 +140,64 @@
 
             <div class="board-overlay" id="board-overlay">
                 <div class="overlay-content">
-                    <div class="success-animation" id="success-animation" style="display: none;">
+                    <div class="success-modal" id="success-modal">
                         <div class="success-icon">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
                                 <path d="M20 6L9 17L4 12" />
                             </svg>
                         </div>
-                        <h3>All Lights Out!</h3>
-                        <p id="completion-stats">Excellent work!</p>
+                        <h2 class="success-title">🎉 All Lights Out!</h2>
+                        <p class="success-subtitle">Excellent work! You've mastered the lights!</p>
+                        
+                        <div class="success-stats">
+                            <div class="stat-item">
+                                <div class="stat-icon">⏱️</div>
+                                <div class="stat-content">
+                                    <div class="stat-label">Time</div>
+                                    <div class="stat-value" id="success-time">--:--</div>
+                                </div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-icon">🎯</div>
+                                <div class="stat-content">
+                                    <div class="stat-label">Moves</div>
+                                    <div class="stat-value" id="success-moves">--</div>
+                                </div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-icon">⭐</div>
+                                <div class="stat-content">
+                                    <div class="stat-label">Efficiency</div>
+                                    <div class="stat-value" id="success-efficiency">--</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="success-actions">
+                            <button class="btn btn-primary" onclick="lightsOutGame.newGame()">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8" />
+                                    <path d="M21 3v5h-5" />
+                                    <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16" />
+                                    <path d="M8 16H3v5" />
+                                </svg>
+                                Play Again
+                            </button>
+                            <button class="btn btn-outline" onclick="window.location.href='../index.html'">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                                    <polyline points="9,22 9,12 15,12 15,22" />
+                                </svg>
+                                Home
+                            </button>
+                            <button class="btn btn-outline" onclick="lightsOutGame.hideSuccessOverlay()">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M18 6L6 18" />
+                                    <path d="M6 6l12 12" />
+                                </svg>
+                                Close
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
