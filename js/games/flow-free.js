@@ -35,7 +35,12 @@ class FlowFreeGame {
         // Use level configurations or default
         const levelConfig = window.FLOW_FREE_LEVELS && window.FLOW_FREE_LEVELS[(this.level - 1) % window.FLOW_FREE_LEVELS.length];
         
+        console.log(`[Flow Free] Loading level ${this.level}`);
+        console.log(`[Flow Free] FLOW_FREE_LEVELS exists:`, !!window.FLOW_FREE_LEVELS);
+        console.log(`[Flow Free] Level config:`, levelConfig ? 'Found' : 'NOT FOUND - using fallback');
+
         if (levelConfig) {
+            console.log(`[Flow Free] Level ${this.level} - Size: ${levelConfig.size}x${levelConfig.size}, Endpoints: ${levelConfig.endpoints.length} colors`);
             this.size = levelConfig.size;
             this.grid = Array(this.size).fill(null).map(() => Array(this.size).fill(null));
             this.paths = {};
@@ -44,16 +49,18 @@ class FlowFreeGame {
             this.currentDifficulty = levelConfig.difficulty;
             
             levelConfig.endpoints.forEach(ep => {
+                console.log(`[Flow Free] Placing color ${ep.colorIdx} endpoints:`, JSON.stringify(ep.positions));
                 this.placeEndpoints(ep.colorIdx, ep.positions);
             });
         } else {
             // Fallback to default
+            console.warn('going here why?...');
             this.size = 5;
             this.grid = Array(this.size).fill(null).map(() => Array(this.size).fill(null));
             this.paths = {};
             this.endpoints = {};
-            this.placeEndpoints(0, [{r: 0, c: 0}, {r: 0, c: 4}]);
-            this.placeEndpoints(1, [{r: 2, c: 1}, {r: 2, c: 3}]);
+            this.placeEndpoints(0, [{ r: 0, c: 0 }, { r: 4, c: 4 }]);
+            this.placeEndpoints(1, [{ r: 4, c: 0 }, { r: 4, c: 3 }]);
         }
         
         this.render();

@@ -62,50 +62,52 @@ class BridgesGame {
             // MEDIUM (Levels 6-12): 6-7 islands, more complex
             [
                 {row: 1, col: 1, required: 2},
-                {row: 1, col: 3, required: 3},
+                { row: 1, col: 3, required: 2 },
                 {row: 1, col: 5, required: 2},
                 {row: 5, col: 1, required: 2},
-                {row: 5, col: 3, required: 3},
+                { row: 5, col: 3, required: 2 },
                 {row: 5, col: 5, required: 2}
             ],
             [
                 {row: 1, col: 1, required: 2},
-                {row: 1, col: 5, required: 3},
+                { row: 1, col: 3, required: 2 },
+                { row: 1, col: 5, required: 2 },
                 {row: 3, col: 3, required: 4},
-                {row: 5, col: 1, required: 3},
+                { row: 5, col: 1, required: 2 },
+                { row: 5, col: 3, required: 2 },
                 {row: 5, col: 5, required: 2}
             ],
             [
-                {row: 1, col: 2, required: 3},
+                { row: 1, col: 2, required: 2 },
                 {row: 1, col: 4, required: 2},
                 {row: 3, col: 2, required: 2},
-                {row: 3, col: 4, required: 3},
+                { row: 3, col: 4, required: 2 },
                 {row: 5, col: 2, required: 2},
                 {row: 5, col: 4, required: 2}
             ],
             [
-                {row: 1, col: 1, required: 3},
+                { row: 1, col: 1, required: 2 },
                 {row: 1, col: 3, required: 4},
-                {row: 1, col: 5, required: 3},
+                { row: 1, col: 5, required: 2 },
                 {row: 5, col: 1, required: 2},
                 {row: 5, col: 3, required: 2},
                 {row: 5, col: 5, required: 2}
             ],
             [
                 {row: 2, col: 1, required: 2},
-                {row: 2, col: 3, required: 4},
+                { row: 2, col: 3, required: 3 },
                 {row: 2, col: 5, required: 2},
-                {row: 4, col: 1, required: 4},
-                {row: 4, col: 3, required: 4},
-                {row: 4, col: 5, required: 4}
+                { row: 4, col: 1, required: 2 },
+                { row: 4, col: 3, required: 3 },
+                { row: 4, col: 5, required: 2 }
             ],
             [
-                {row: 1, col: 1, required: 4},
+                { row: 1, col: 1, required: 3 },
                 {row: 1, col: 3, required: 3},
                 {row: 3, col: 1, required: 2},
                 {row: 3, col: 3, required: 4},
                 {row: 3, col: 5, required: 2},
-                {row: 5, col: 3, required: 3}
+                { row: 5, col: 3, required: 2 }
             ],
             [
                 {row: 1, col: 2, required: 2},

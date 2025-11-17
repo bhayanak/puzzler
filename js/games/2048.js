@@ -4,8 +4,6 @@ class Game2048 {
         this.grid = Array(4).fill(null).map(() => Array(4).fill(0));
         this.score = 0;
         this.bestScore = parseInt(localStorage.getItem('2048-best') || '0');
-        this.history = [];
-        this.maxHistory = 5;
         this.initializeDOM();
         this.newGame();
     }
@@ -17,19 +15,27 @@ class Game2048 {
         this.overlayElement = document.getElementById('board-overlay');
         
         document.getElementById('new-game-btn').addEventListener('click', () => this.newGame());
-        document.getElementById('undo-btn').addEventListener('click', () => this.undo());
+        document.getElementById('fullscreen-btn')?.addEventListener('click', () => this.toggleFullscreen());
         document.getElementById('continue-btn').addEventListener('click', () => this.hideOverlay());
         document.getElementById('restart-btn').addEventListener('click', () => this.newGame());
         
         document.addEventListener('keydown', (e) => this.handleKeyPress(e));
         
+        // Prevent pull-to-refresh and bounce scrolling on mobile
+        document.body.addEventListener('touchmove', (e) => {
+            if (e.target.closest('.game-board')) {
+                e.preventDefault();
+            }
+        }, { passive: false });
+
         // Touch swipe support
         let touchStartX = 0;
         let touchStartY = 0;
         this.boardElement.addEventListener('touchstart', (e) => {
+            e.preventDefault();
             touchStartX = e.touches[0].clientX;
             touchStartY = e.touches[0].clientY;
-        });
+        }, { passive: false });
         this.boardElement.addEventListener('touchend', (e) => {
             if (!touchStartX || !touchStartY) return;
             const touchEndX = e.changedTouches[0].clientX;
@@ -53,10 +59,19 @@ class Game2048 {
         });
     }
     
+    toggleFullscreen() {
+        if (!document.fullscreenElement) {
+            document.documentElement.requestFullscreen().catch(err => {
+                alert('Fullscreen failed: ' + err.message);
+            });
+        } else {
+            document.exitFullscreen();
+        }
+    }
+
     newGame() {
         this.grid = Array(4).fill(null).map(() => Array(4).fill(0));
         this.score = 0;
-        this.history = []; // Clear history when starting new game
         this.addRandomTile();
         this.addRandomTile();
         this.render();
@@ -75,24 +90,7 @@ class Game2048 {
             this.grid[i][j] = Math.random() > 0.9 ? 4 : 2;
         }
     }
-    
-    saveState() {
-        this.history.push({
-            grid: this.grid.map(row => [...row]),
-            score: this.score
-        });
-        if (this.history.length > this.maxHistory) this.history.shift();
-    }
-    
-    undo() {
-        if (this.history.length > 0) {
-            const state = this.history.pop();
-            this.grid = state.grid.map(row => [...row]);
-            this.score = state.score;
-            this.render();
-        }
-    }
-    
+
     handleKeyPress(e) {
         const key = e.key;
         if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(key)) {
@@ -102,25 +100,14 @@ class Game2048 {
     }
     
     move(direction) {
-        // Create snapshot of current state BEFORE any modifications
-        const gridSnapshot = this.grid.map(row => [...row]);
-        const scoreSnapshot = this.score;
-        
         const oldGrid = JSON.stringify(this.grid);
+
         if (direction === 'left') this.moveLeft();
         else if (direction === 'right') this.moveRight();
         else if (direction === 'up') this.moveUp();
         else if (direction === 'down') this.moveDown();
         
         if (JSON.stringify(this.grid) !== oldGrid) {
-            // Move changed the grid - save the snapshot (before new tile)
-            // CRITICAL: Trim history BEFORE adding new tile
-            if (this.history.length >= this.maxHistory) this.history.shift();
-            this.history.push({
-                grid: gridSnapshot,
-                score: scoreSnapshot
-            });
-            
             this.addRandomTile();
             this.render();
             this.checkWin();
@@ -213,11 +200,7 @@ class Game2048 {
     hideOverlay() {
         this.overlayElement.classList.remove('show');
     }
-    
-    undo() {
-        // Basic undo placeholder
-    }
-    
+
     render() {
         this.boardElement.innerHTML = '';
         for (let i = 0; i < 4; i++) {

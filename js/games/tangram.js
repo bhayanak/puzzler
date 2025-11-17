@@ -172,11 +172,15 @@ class TangramGame {
     }
     
     render() {
+        const targetPath = this.currentLevel.targetShape;
         this.boardElement.innerHTML = `
-            <div style="margin-bottom: 15px; padding: 10px; background: #f0f0f0; border-radius: 8px; text-align: center;">
-                <strong>🎯 Target: ${this.currentLevel.name}</strong> - Arrange all 7 pieces to form the shape
+            <div style="margin-bottom: 15px; padding: 10px; background: #f0f0f0; border-radius: 8px; display: flex; align-items: center; justify-content: center; gap: 15px;">
+                <svg width="100" height="100" viewBox="0 0 200 200" style="border: 2px solid #ddd; border-radius: 4px; background: white;">
+                    <path d="${targetPath}" fill="#333" opacity="0.3" stroke="#666" stroke-width="2"/>
+                </svg>
+                <strong>🎯 ${this.currentLevel.name}</strong>
             </div>
-            <svg width="100%" height="500" style="border: 2px solid #ddd; border-radius: 8px; background: #f8f9fa;">
+            <svg width="600" height="450" viewBox="0 0 600 450" style="border: 2px solid #ddd; border-radius: 8px; background: #f8f9fa;">
                 <defs>
                     <filter id="shadow">
                         <feDropShadow dx="2" dy="2" stdDeviation="3" flood-opacity="0.3"/>
@@ -310,23 +314,26 @@ class TangramGame {
     }
     
     showSolution() {
-        if (!this.currentLevel || !this.currentLevel.solution) {
-            alert('No solution available for this level');
-            return;
-        }
+        const solution = this.currentLevel.solution;
+        console.log('[Tangram] Applying solution...');
+        console.log('[Tangram] Current level:', this.currentLevel.name);
+        console.log('[Tangram] Solution exists:', !!solution);
 
-        // Apply solution positions and rotations
-        this.currentLevel.solution.forEach(sol => {
-            const piece = this.pieces.find(p => p.id === sol.id);
+        if (!solution) return;
+
+        solution.forEach((sol, idx) => {
+            const piece = this.pieces[sol.id];
             if (piece) {
-                piece.x = sol.x;
-                piece.y = sol.y;
+                const oldX = piece.x, oldY = piece.y, oldRot = piece.rotation;
+
+                piece.x = sol.x + 150;
+                piece.y = sol.y + 150;
                 piece.rotation = sol.rotation;
+
+                console.log(`[Tangram] Piece ${sol.id}: (${oldX},${oldY},${oldRot}°) → (${piece.x},${piece.y},${piece.rotation}°)`);
             }
         });
-
         this.render();
-        alert(`💡 Solution shown for ${this.currentLevel.name}! Study the arrangement.`);
     }
 
     updateGlobalStats() {
