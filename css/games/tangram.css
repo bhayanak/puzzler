@@ -1,0 +1,3 @@
+/* TANGRAM STYLES */
+.tangram-board { width: 400px; height: 400px; background: var(--surface); border-radius: 8px; position: relative; }
+.tangram-piece { position: absolute; background: var(--primary); border: 2px solid var(--border); cursor: move; }

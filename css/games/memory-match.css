@@ -1,0 +1,9 @@
+/* MEMORY MATCH STYLES */
+.memory-board { display: grid; grid-template-columns: repeat(4, 100px); gap: 10px; padding: 20px; }
+.memory-card { width: 100px; height: 100px; background: var(--primary); border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 48px; transition: transform 0.3s ease; position: relative; transform-style: preserve-3d; }
+.memory-card.flipped { transform: rotateY(180deg); }
+.memory-card .card-back { position: absolute; backface-visibility: hidden; }
+.memory-card .card-front { position: absolute; backface-visibility: hidden; transform: rotateY(180deg); }
+.board-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.85); display: none; align-items: center; justify-content: center; z-index: 2000; }
+.board-overlay.show { display: flex; }
+.success-content { text-align: center; color: var(--text); padding: 2rem; }

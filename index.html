@@ -198,6 +198,41 @@
                             </div>
                         </div>
 
+                        <!-- Sokoban Game Card -->
+                        <div class="game-card">
+                            <div class="game-card-header">
+                                <div class="game-icon">📦</div>
+                                <div class="game-status">
+                                    <span class="status-badge new">New!</span>
+                                </div>
+                            </div>
+                            <div class="game-card-content">
+                                <h3 class="game-title">Sokoban</h3>
+                                <p class="game-description">
+                                    Push boxes to their targets in this classic warehouse puzzle game.
+                                    Strategic thinking required to avoid getting boxes stuck!
+                                </p>
+                                <div class="game-stats">
+                                    <div class="stat">
+                                        <span class="stat-label">Difficulty:</span>
+                                        <span class="stat-value">★★★★★</span>
+                                    </div>
+                                    <div class="stat">
+                                        <span class="stat-label">Best Moves:</span>
+                                        <span class="stat-value" id="sokoban-best-moves">--</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="game-card-actions">
+                                <button class="btn btn-primary" onclick="startGame('sokoban')">
+                                    Play Now
+                                </button>
+                                <button class="btn btn-outline" onclick="showGameInfo('sokoban')">
+                                    Learn Rules
+                                </button>
+                            </div>
+                        </div>
+
                         <div class="game-card">
                             <div class="game-card-header">
                                 <div class="game-icon">🔢</div>
@@ -231,6 +266,347 @@
                                 </button>
                             </div>
                         </div>
+<!-- Minesweeper Game Card -->
+<div class="game-card">
+    <div class="game-card-header">
+        <div class="game-icon">💣</div>
+        <div class="game-status">
+            <span class="status-badge new">New!</span>
+        </div>
+    </div>
+    <div class="game-card-content">
+        <h3 class="game-title">Minesweeper</h3>
+        <p class="game-description">
+            Classic mine detection puzzle with explosive animations!
+            Use logic and deduction to reveal all safe cells without triggering mines.
+        </p>
+        <div class="game-stats">
+            <div class="stat">
+                <span class="stat-label">Difficulty:</span>
+                <span class="stat-value">★★★☆☆</span>
+            </div>
+            <div class="stat">
+                <span class="stat-label">Best Time:</span>
+                <span class="stat-value" id="minesweeper-best-time">--:--</span>
+            </div>
+        </div>
+    </div>
+    <div class="game-card-actions">
+        <button class="btn btn-primary" onclick="startGame('minesweeper')">
+            Play Now
+        </button>
+        <button class="btn btn-outline" onclick="showGameInfo('minesweeper')">
+            Learn Rules
+        </button>
+    </div>
+</div>
+
+<!-- Nonogram Game Card -->
+<div class="game-card">
+    <div class="game-card-header">
+        <div class="game-icon">🎨</div>
+        <div class="game-status">
+            <span class="status-badge new">New!</span>
+        </div>
+    </div>
+    <div class="game-card-content">
+        <h3 class="game-title">Nonogram</h3>
+        <p class="game-description">
+            Reveal the hidden picture by filling cells based on number clues!
+        </p>
+        <div class="game-stats">
+            <div class="stat">
+                <span class="stat-label">Difficulty:</span>
+                <span class="stat-value">★★★☆☆</span>
+            </div>
+            <div class="stat">
+                <span class="stat-label">Best Time:</span>
+                <span class="stat-value" id="nonogram-best-time">--:--</span>
+            </div>
+        </div>
+    </div>
+    <div class="game-card-actions">
+        <button class="btn btn-primary" onclick="startGame('nonogram')">
+            Play Now
+        </button>
+        <button class="btn btn-outline" onclick="showGameInfo('nonogram')">
+            Learn Rules
+        </button>
+    </div>
+</div>
+
+<!-- 2048 Game Card -->
+<div class="game-card">
+    <div class="game-card-header">
+        <div class="game-icon">🔢</div>
+        <div class="game-status">
+            <span class="status-badge new">New!</span>
+        </div>
+    </div>
+    <div class="game-card-content">
+        <h3 class="game-title">2048</h3>
+        <p class="game-description">
+            Merge tiles to reach 2048 in this addictive number puzzle!
+        </p>
+        <div class="game-stats">
+            <div class="stat">
+                <span class="stat-label">Difficulty:</span>
+                <span class="stat-value">★★★☆☆</span>
+            </div>
+            <div class="stat">
+                <span class="stat-label">High Score:</span>
+                <span class="stat-value" id="2048-high-score">0</span>
+            </div>
+        </div>
+    </div>
+    <div class="game-card-actions">
+        <button class="btn btn-primary" onclick="startGame('2048')">
+            Play Now
+        </button>
+        <button class="btn btn-outline" onclick="showGameInfo('2048')">
+            Learn Rules
+        </button>
+    </div>
+</div>
+
+<!-- Flow Free Game Card -->
+<div class="game-card">
+    <div class="game-card-header">
+        <div class="game-icon">🌊</div>
+        <div class="game-status">
+            <span class="status-badge new">New!</span>
+        </div>
+    </div>
+    <div class="game-card-content">
+        <h3 class="game-title">Flow Free</h3>
+        <p class="game-description">
+            Connect matching dots to fill 100% of the board!
+        </p>
+        <div class="game-stats">
+            <div class="stat">
+                <span class="stat-label">Difficulty:</span>
+                <span class="stat-value">★★☆☆☆</span>
+            </div>
+            <div class="stat">
+                <span class="stat-label">Best Time:</span>
+                <span class="stat-value" id="flow-free-best-time">--:--</span>
+            </div>
+        </div>
+    </div>
+    <div class="game-card-actions">
+        <button class="btn btn-primary" onclick="startGame('flow-free')">
+            Play Now
+        </button>
+        <button class="btn btn-outline" onclick="showGameInfo('flow-free')">
+            Learn Rules
+        </button>
+    </div>
+</div>
+
+<!-- Memory Match Game Card -->
+<div class="game-card">
+    <div class="game-card-header">
+        <div class="game-icon">🃏</div>
+        <div class="game-status">
+            <span class="status-badge new">New!</span>
+        </div>
+    </div>
+    <div class="game-card-content">
+        <h3 class="game-title">Memory Match</h3>
+        <p class="game-description">
+            Test your memory by matching pairs of emoji cards!
+        </p>
+        <div class="game-stats">
+            <div class="stat">
+                <span class="stat-label">Difficulty:</span>
+                <span class="stat-value">★★☆☆☆</span>
+            </div>
+            <div class="stat">
+                <span class="stat-label">Best Moves:</span>
+                <span class="stat-value" id="memory-match-best-moves">--</span>
+            </div>
+        </div>
+    </div>
+    <div class="game-card-actions">
+        <button class="btn btn-primary" onclick="startGame('memory-match')">
+            Play Now
+        </button>
+        <button class="btn btn-outline" onclick="showGameInfo('memory-match')">
+            Learn Rules
+        </button>
+    </div>
+</div>
+
+<!-- Mastermind Game Card -->
+<div class="game-card">
+    <div class="game-card-header">
+        <div class="game-icon">🎯</div>
+        <div class="game-status">
+            <span class="status-badge new">New!</span>
+        </div>
+    </div>
+    <div class="game-card-content">
+        <h3 class="game-title">Mastermind</h3>
+        <p class="game-description">
+            Break the secret code using logic and deduction!
+        </p>
+        <div class="game-stats">
+            <div class="stat">
+                <span class="stat-label">Difficulty:</span>
+                <span class="stat-value">★★★★☆</span>
+            </div>
+            <div class="stat">
+                <span class="stat-label">Best Attempts:</span>
+                <span class="stat-value" id="mastermind-best-attempts">--</span>
+            </div>
+        </div>
+    </div>
+    <div class="game-card-actions">
+        <button class="btn btn-primary" onclick="startGame('mastermind')">
+            Play Now
+        </button>
+        <button class="btn btn-outline" onclick="showGameInfo('mastermind')">
+            Learn Rules
+        </button>
+    </div>
+</div>
+
+<!-- Tenteki Game Card -->
+<div class="game-card">
+    <div class="game-card-header">
+        <div class="game-icon">⚡</div>
+        <div class="game-status">
+            <span class="status-badge new">New!</span>
+        </div>
+    </div>
+    <div class="game-card-content">
+        <h3 class="game-title">Tenteki</h3>
+        <p class="game-description">
+            Redirect laser beams with mirrors to hit all targets!
+        </p>
+        <div class="game-stats">
+            <div class="stat">
+                <span class="stat-label">Difficulty:</span>
+                <span class="stat-value">★★★☆☆</span>
+            </div>
+            <div class="stat">
+                <span class="stat-label">Level:</span>
+                <span class="stat-value" id="tenteki-level">1</span>
+            </div>
+        </div>
+    </div>
+    <div class="game-card-actions">
+        <button class="btn btn-primary" onclick="startGame('tenteki')">
+            Play Now
+        </button>
+        <button class="btn btn-outline" onclick="showGameInfo('tenteki')">
+            Learn Rules
+        </button>
+    </div>
+</div>
+
+<!-- Tangram Game Card -->
+<div class="game-card">
+    <div class="game-card-header">
+        <div class="game-icon">🔷</div>
+        <div class="game-status">
+            <span class="status-badge new">New!</span>
+        </div>
+    </div>
+    <div class="game-card-content">
+        <h3 class="game-title">Tangram</h3>
+        <p class="game-description">
+            Arrange 7 geometric pieces to match the target shape!
+        </p>
+        <div class="game-stats">
+            <div class="stat">
+                <span class="stat-label">Difficulty:</span>
+                <span class="stat-value">★★★☆☆</span>
+            </div>
+            <div class="stat">
+                <span class="stat-label">Puzzle:</span>
+                <span class="stat-value" id="tangram-puzzle">1</span>
+            </div>
+        </div>
+    </div>
+    <div class="game-card-actions">
+        <button class="btn btn-primary" onclick="startGame('tangram')">
+            Play Now
+        </button>
+        <button class="btn btn-outline" onclick="showGameInfo('tangram')">
+            Learn Rules
+        </button>
+    </div>
+</div>
+
+<!-- Hexoku Game Card -->
+<div class="game-card">
+    <div class="game-card-header">
+        <div class="game-icon">🔄</div>
+        <div class="game-status">
+            <span class="status-badge new">New!</span>
+        </div>
+    </div>
+    <div class="game-card-content">
+        <h3 class="game-title">Hexoku</h3>
+        <p class="game-description">
+            Hexagonal Sudoku puzzle with unique region constraints!
+        </p>
+        <div class="game-stats">
+            <div class="stat">
+                <span class="stat-label">Difficulty:</span>
+                <span class="stat-value">★★★★☆</span>
+            </div>
+            <div class="stat">
+                <span class="stat-label">Puzzle:</span>
+                <span class="stat-value" id="hexoku-puzzle">1</span>
+            </div>
+        </div>
+    </div>
+    <div class="game-card-actions">
+        <button class="btn btn-primary" onclick="startGame('hexoku')">
+            Play Now
+        </button>
+        <button class="btn btn-outline" onclick="showGameInfo('hexoku')">
+            Learn Rules
+        </button>
+    </div>
+</div>
+
+<!-- Bridges Game Card -->
+<div class="game-card">
+    <div class="game-card-header">
+        <div class="game-icon">🌉</div>
+        <div class="game-status">
+            <span class="status-badge new">New!</span>
+        </div>
+    </div>
+    <div class="game-card-content">
+        <h3 class="game-title">Bridges</h3>
+        <p class="game-description">
+            Connect islands with bridges following number constraints!
+        </p>
+        <div class="game-stats">
+            <div class="stat">
+                <span class="stat-label">Difficulty:</span>
+                <span class="stat-value">★★★★☆</span>
+            </div>
+            <div class="stat">
+                <span class="stat-label">Level:</span>
+                <span class="stat-value" id="bridges-level">1</span>
+            </div>
+        </div>
+    </div>
+    <div class="game-card-actions">
+        <button class="btn btn-primary" onclick="startGame('bridges')">
+            Play Now
+        </button>
+        <button class="btn btn-outline" onclick="showGameInfo('bridges')">
+            Learn Rules
+        </button>
+    </div>
+</div>
+
                     </div>
                 </section>
 

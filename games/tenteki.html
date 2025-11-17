@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tenteki (Laser) - Puzzle Collection</title>
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="../css/games/tenteki.css">
+</head>
+<body>
+    <div class="game-container">
+        <header class="game-header">
+            <button class="back-button" onclick="window.location.href='../index.html'">← Back to Games</button>
+            <h1>⚡ Tenteki</h1>
+            <p class="game-subtitle">Redirect the laser to hit all targets</p>
+        </header>
+        <div class="game-content">
+            <div class="control-panel">
+                <div class="game-stats"><div class="stat-item"><span class="stat-label">Level:</span><span id="level" class="stat-value">1</span></div></div>
+                <div class="game-actions"><button id="next-btn" class="btn btn-primary">Next Level</button></div>
+            </div>
+            <div class="board-wrapper"><div id="tenteki-board" class="tenteki-board"></div></div>
+        </div>
+        <div class="game-instructions"><h3>How to Play</h3><ul><li>Place mirrors to redirect laser</li><li>Hit all targets to complete</li></ul></div>
+    </div>
+    <script src="../js/utils.js"></script>
+    <script src="../js/games/tenteki.js"></script>
+    <script>document.addEventListener('DOMContentLoaded', () => { if (typeof TentekiGame !== 'undefined') window.tentekiGame = new TentekiGame(); });</script>
+</body>
+</html>

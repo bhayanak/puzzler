@@ -1,0 +1,51 @@
+/* FLOW FREE STYLES */
+.flow-board {
+    display: grid;
+    gap: 2px;
+    background: var(--border);
+    padding: 4px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    margin: 20px auto;
+}
+
+.flow-cell {
+    width: 60px;
+    height: 60px;
+    background: white;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.flow-cell:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.flow-cell.endpoint {
+    border: 4px solid white;
+    box-shadow: 0 0 0 2px currentColor, 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.flow-cell.endpoint::after {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background: white;
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.flow-cell.path {
+    box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.board-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.85); display: none; align-items: center; justify-content: center; z-index: 2000; }
+.board-overlay.show { display: flex; }
+.success-content { text-align: center; color: var(--text); padding: 2rem; }

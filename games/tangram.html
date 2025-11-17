@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tangram - Puzzle Collection</title>
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="../css/games/tangram.css">
+</head>
+<body>
+    <div class="game-container">
+        <header class="game-header">
+            <button class="back-button" onclick="window.location.href='../index.html'">← Back to Games</button>
+            <h1>🎨 Tangram</h1>
+            <p class="game-subtitle">Arrange 7 pieces to match the shape</p>
+        </header>
+        <div class="game-content">
+            <div class="control-panel">
+                <div class="game-stats"><div class="stat-item"><span class="stat-label">Puzzle:</span><span id="puzzle-num" class="stat-value">1</span></div></div>
+                <div class="game-actions"><button id="next-btn" class="btn btn-primary">Next Puzzle</button></div>
+            </div>
+            <div class="board-wrapper"><div id="tangram-board" class="tangram-board"></div></div>
+        </div>
+        <div class="game-instructions"><h3>How to Play</h3><ul><li>Drag and rotate pieces</li><li>Match the target silhouette</li></ul></div>
+    </div>
+    <script src="../js/utils.js"></script>
+    <script src="../js/games/tangram.js"></script>
+    <script>document.addEventListener('DOMContentLoaded', () => { if (typeof TangramGame !== 'undefined') window.tangramGame = new TangramGame(); });</script>
+</body>
+</html>

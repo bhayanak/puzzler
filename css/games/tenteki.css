@@ -1,0 +1,67 @@
+/* TENTEKI STYLES */
+.tenteki-board { 
+    display: grid; 
+    grid-template-columns: repeat(8, 50px); 
+    grid-template-rows: repeat(8, 50px);
+    gap: 2px; 
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 15px; 
+    border-radius: 8px; 
+}
+
+.tenteki-cell { 
+    width: 50px; 
+    height: 50px; 
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 4px; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    font-size: 24px; 
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.tenteki-cell:hover {
+    background: rgba(255, 255, 255, 1);
+    transform: scale(1.05);
+}
+
+.tenteki-cell.laser-start {
+    background: linear-gradient(135deg, #ffd700, #ffed4e);
+    font-size: 28px;
+    cursor: default;
+}
+
+.tenteki-cell.target {
+    background: linear-gradient(135deg, #ff6b6b, #ee5a6f);
+    font-size: 28px;
+    cursor: default;
+}
+
+.tenteki-cell.mirror {
+    background: linear-gradient(145deg, #e0e0e0, #f5f5f5);
+    font-size: 36px;
+    font-weight: bold;
+    color: #333;
+}
+
+.mirror-btn {
+    padding: 10px 20px;
+    font-size: 18px;
+    border: 2px solid #667eea;
+    background: white;
+    color: #667eea;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.mirror-btn:hover {
+    background: #f0f0ff;
+}
+
+.mirror-btn.active {
+    background: #667eea;
+    color: white;
+}

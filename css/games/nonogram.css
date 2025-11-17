@@ -1,0 +1,183 @@
+/* ===================================
+   NONOGRAM (PICROSS) GAME STYLES
+   =================================== */
+
+.board-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 2rem auto;
+    padding: 2rem;
+}
+
+/* NONOGRAM STYLES */
+.nonogram-container {
+    display: inline-block;
+    margin: 20px auto;
+}
+
+.col-clues {
+    display: grid;
+    gap: 1px;
+    margin-bottom: 5px;
+    margin-left: 60px;
+}
+
+.col-clue {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    min-height: 60px;
+    font-size: 12px;
+    font-weight: bold;
+    color: var(--primary);
+    padding: 2px;
+}
+
+.col-clue span {
+    display: block;
+    line-height: 14px;
+}
+
+.nonogram-grid-wrapper {
+    display: flex;
+    gap: 5px;
+}
+
+.row-clues {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    justify-content: flex-start;
+}
+
+.row-clue {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    min-width: 60px;
+    height: 30px;
+    font-size: 12px;
+    font-weight: bold;
+    color: var(--primary);
+    padding: 0 5px;
+}
+
+.row-clue span {
+    margin-left: 3px;
+}
+
+.nonogram-board {
+    display: grid;
+    gap: 1px;
+    background: var(--border);
+    padding: 2px;
+    border-radius: 8px;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.nonogram-cell {
+    width: 30px;
+    height: 30px;
+    background: white;
+    border: 1px solid #ddd;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+}
+
+.nonogram-cell:hover {
+    background: #f0f0f0;
+    transform: scale(1.05);
+}
+
+.nonogram-cell.filled {
+    background: var(--primary);
+    border-color: var(--primary);
+}
+
+.nonogram-cell.marked {
+    background: white;
+    color: #999;
+}
+
+.nonogram-cell.marked::after {
+    content: '✕';
+    font-size: 20px;
+    color: #999;
+}
+
+.nonogram-cell.error {
+    background: #ffebee;
+    border-color: #f44336;
+    animation: shake 0.3s;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}
+
+.tool-btn.active {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+}
+
+@keyframes errorShake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}
+
+.nonogram-clue {
+    background: var(--surface-light);
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: bold;
+    color: var(--text-secondary);
+}
+
+.tool-btn.active {
+    background: var(--primary);
+    color: white;
+}
+
+.board-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.85);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+}
+
+.board-overlay.show {
+    display: flex;
+}
+
+.success-content {
+    text-align: center;
+    color: var(--text);
+    padding: 2rem;
+    animation: successBounce 0.6s ease;
+}
+
+@keyframes successBounce {
+    0% { transform: scale(0.3); opacity: 0; }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); opacity: 1; }
+}

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memory Match - Puzzle Collection</title>
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="../css/games/memory-match.css">
+</head>
+<body>
+    <div class="game-container">
+        <header class="game-header">
+            <button class="back-button" onclick="window.location.href='../index.html'">← Back to Games</button>
+            <h1>🧠 Memory Match</h1>
+            <p class="game-subtitle">Find all matching pairs</p>
+        </header>
+        <div class="game-content">
+            <div class="control-panel">
+                <div class="game-stats">
+                    <div class="stat-item"><span class="stat-label">Moves:</span><span id="moves" class="stat-value">0</span></div>
+                    <div class="stat-item"><span class="stat-label">Matches:</span><span id="matches" class="stat-value">0/8</span></div>
+                    <div class="stat-item"><span class="stat-label">Time:</span><span id="timer" class="stat-value">0:00</span></div>
+                </div>
+                <div class="game-actions"><button id="new-game-btn" class="btn btn-primary">New Game</button></div>
+            </div>
+            <div class="board-wrapper"><div id="memory-board" class="memory-board"></div></div>
+            <div id="board-overlay" class="board-overlay"><div class="success-content"><h2>You Won!</h2><p id="final-stats"></p><button id="play-again-btn" class="btn btn-primary">Play Again</button></div></div>
+        </div>
+        <div class="game-instructions"><h3>How to Play</h3><ul><li>Click cards to flip them</li><li>Find all matching pairs</li><li>Complete with minimum moves!</li></ul></div>
+    </div>
+    <script src="../js/utils.js"></script>
+    <script src="../js/games/memory-match.js"></script>
+    <script>document.addEventListener('DOMContentLoaded', () => { if (typeof MemoryMatchGame !== 'undefined') window.memoryGame = new MemoryMatchGame(); });</script>
+</body>
+</html>

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minesweeper - Puzzle Collection</title>
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="../css/games/minesweeper.css">
+</head>
+<body>
+    <div class="game-container">
+        <header class="game-header">
+            <button class="back-button" onclick="window.location.href='../index.html'">
+                ← Back to Games
+            </button>
+            <h1>💣 Minesweeper</h1>
+            <p class="game-subtitle">Classic mine detection puzzle with explosive animations</p>
+        </header>
+
+        <div class="game-content">
+            <!-- Control Panel -->
+            <div class="control-panel">
+                <div class="difficulty-selector">
+                    <label for="difficulty-select">Difficulty:</label>
+                    <select id="difficulty-select" class="game-select">
+                        <option value="beginner">Beginner (9x9, 10 mines)</option>
+                        <option value="intermediate" selected>Intermediate (16x16, 40 mines)</option>
+                        <option value="expert">Expert (30x16, 99 mines)</option>
+                        <option value="custom">Custom...</option>
+                    </select>
+                </div>
+
+                <div class="game-stats">
+                    <div class="stat-item">
+                        <span class="stat-icon">💣</span>
+                        <span class="stat-label">Mines:</span>
+                        <span id="mines-remaining" class="stat-value">40</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-icon">⏱️</span>
+                        <span class="stat-label">Time:</span>
+                        <span id="timer" class="stat-value">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-icon">🏆</span>
+                        <span class="stat-label">Best:</span>
+                        <span id="best-time" class="stat-value">--</span>
+                    </div>
+                </div>
+
+                <div class="game-actions">
+                    <button id="new-game-btn" class="btn btn-primary">New Game</button>
+                    <button id="hint-btn" class="btn btn-secondary">Hint</button>
+                </div>
+            </div>
+
+            <!-- Game Board -->
+            <div class="board-wrapper">
+                <div id="minesweeper-board" class="minesweeper-board"></div>
+            </div>
+
+            <!-- Success Overlay -->
+            <div id="board-overlay" class="board-overlay">
+                <div class="success-content">
+                    <div class="success-icon">🎉</div>
+                    <h2>Victory!</h2>
+                    <p class="success-message">All mines defused!</p>
+                    <div class="success-stats">
+                        <div class="success-stat">
+                            <span class="stat-label">Time:</span>
+                            <span id="success-time" class="stat-value">0</span>
+                        </div>
+                        <div class="success-stat">
+                            <span class="stat-label">Difficulty:</span>
+                            <span id="success-difficulty" class="stat-value">--</span>
+                        </div>
+                        <div class="success-stat">
+                            <span class="stat-label">Rating:</span>
+                            <span id="success-rating" class="stat-value">⭐⭐⭐</span>
+                        </div>
+                    </div>
+                    <div class="success-actions">
+                        <button id="play-again-btn" class="btn btn-primary">Play Again</button>
+                        <button id="change-difficulty-btn" class="btn btn-secondary">Change Difficulty</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Instructions -->
+        <div class="game-instructions">
+            <h3>How to Play</h3>
+            <ul>
+                <li><strong>Left Click:</strong> Reveal a cell</li>
+                <li><strong>Right Click:</strong> Flag/unflag a mine</li>
+                <li><strong>Chord Click:</strong> Click revealed number with correct flags to reveal surrounding cells</li>
+                <li><strong>Goal:</strong> Reveal all safe cells without triggering any mines</li>
+                <li><strong>Numbers:</strong> Show how many mines are in adjacent cells</li>
+                <li><strong>First Click:</strong> Always safe - board generates after your first move</li>
+            </ul>
+        </div>
+    </div>
+
+    <script src="../js/utils.js"></script>
+    <script src="../js/games/minesweeper.js"></script>
+    <script>
+        // Initialize game when DOM is ready
+        document.addEventListener('DOMContentLoaded', () => {
+            if (typeof MinesweeperGame !== 'undefined') {
+                window.minesweeperGame = new MinesweeperGame();
+            }
+        });
+    </script>
+</body>
+</html>

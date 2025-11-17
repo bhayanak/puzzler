@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bridges - Puzzle Collection</title>
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="../css/games/bridges.css">
+</head>
+<body>
+    <div class="game-container">
+        <header class="game-header">
+            <button class="back-button" onclick="window.location.href='../index.html'">← Back to Games</button>
+            <h1>🌉 Bridges</h1>
+            <p class="game-subtitle">Connect all islands with bridges</p>
+        </header>
+        <div class="game-content">
+            <div class="control-panel">
+                <div class="game-stats"><div class="stat-item"><span class="stat-label">Level:</span><span id="level" class="stat-value">1</span></div></div>
+                <div class="game-actions">
+                    <button id="hint-btn" class="btn btn-secondary">💡 Hint</button>
+                    <button id="check-btn" class="btn btn-primary">Check Solution</button>
+                </div>
+            </div>
+            <div class="board-wrapper"><div id="bridges-board" class="bridges-board"></div></div>
+        </div>
+        <div class="game-instructions"><h3>How to Play</h3><ul><li><strong>Goal:</strong> Connect all islands with bridges</li><li><strong>Rules:</strong> Each island shows how many bridges it needs (1-4)</li><li><strong>Connect:</strong> Click one island, then click another in the same row/column</li><li><strong>Multiple Bridges:</strong> Click same pair again for double bridge (max 2)</li><li><strong>Remove:</strong> Click a third time to remove the bridge</li><li><strong>Win:</strong> All islands must have the correct number of bridges</li></ul></div>
+    </div>
+    <script src="../js/utils.js"></script>
+    <script src="../js/games/bridges.js"></script>
+    <script>document.addEventListener('DOMContentLoaded', () => { if (typeof BridgesGame !== 'undefined') window.bridgesGame = new BridgesGame(); });</script>
+</body>
+</html>

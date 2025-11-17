@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sokoban | Puzzle Collection</title>
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="../css/games/sokoban.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <meta name="description" content="Play Sokoban - Push boxes to their targets in this challenging warehouse puzzle game">
+</head>
+<body>
+    <div class="game-container">
+        <!-- Navigation Header -->
+        <header class="game-header">
+            <nav class="game-nav">
+                <a href="../index.html" class="nav-home">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                        <polyline points="9,22 9,12 15,12 15,22"/>
+                    </svg>
+                    <span>Home</span>
+                </a>
+                <div class="game-title">
+                    <h1>📦 Sokoban</h1>
+                    <p>Push boxes to their targets</p>
+                </div>
+                <div class="game-stats">
+                    <div class="stat-item">
+                        <span class="stat-label">Level</span>
+                        <span class="stat-value" id="current-level">1</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Moves</span>
+                        <span class="stat-value" id="move-counter">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Pushes</span>
+                        <span class="stat-value" id="push-counter">0</span>
+                    </div>
+                </div>
+            </nav>
+        </header>
+
+        <!-- Game Controls -->
+        <section class="game-controls">
+            <div class="controls-group">
+                <button class="btn btn-secondary" id="undo-btn" title="Undo last move (U)">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 7v6h6"/>
+                        <path d="M21 17a9 9 0 0 0-9-9 9 9 0 0 0-6 2.3L3 13"/>
+                    </svg>
+                    <span>Undo</span>
+                </button>
+                <button class="btn btn-secondary" id="reset-btn" title="Reset level (R)">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/>
+                        <path d="M21 3v5h-5"/>
+                        <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/>
+                        <path d="M8 16H3v5"/>
+                    </svg>
+                    <span>Reset</span>
+                </button>
+                <button class="btn btn-secondary" id="hint-btn" title="Show hint (H)">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/>
+                        <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+                        <line x1="12" y1="17" x2="12.01" y2="17"/>
+                    </svg>
+                    <span>Hint</span>
+                </button>
+            </div>
+
+            <div class="controls-group">
+                <div class="level-selector">
+                    <label for="level-select">Level:</label>
+                    <select id="level-select" class="level-select">
+                        <!-- Options will be populated dynamically by JavaScript -->
+                    </select>
+                </div>
+                <button class="btn btn-primary" id="next-level-btn" title="Next level (N)" disabled>
+                    <span>Next Level</span>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="9,18 15,12 9,6"/>
+                    </svg>
+                </button>
+            </div>
+        </section>
+
+        <!-- Game Board Container -->
+        <main class="game-board-container">
+            <div class="game-board" id="sokoban-board">
+                <!-- Game board will be generated here -->
+            </div>
+
+            <!-- Success Overlay -->
+            <div class="board-overlay" id="board-overlay">
+                <div class="overlay-content">
+                    <div class="success-modal" id="success-modal">
+                        <div class="success-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                                <path d="M20 6L9 17L4 12" />
+                            </svg>
+                        </div>
+                        <h2 class="success-title">🎉 Level Complete!</h2>
+                        <p class="success-subtitle">Excellent work! All boxes are in place!</p>
+                        
+                        <div class="success-stats">
+                            <div class="stat-item">
+                                <div class="stat-icon">🎯</div>
+                                <div class="stat-content">
+                                    <div class="stat-label">Moves</div>
+                                    <div class="stat-value" id="success-moves">--</div>
+                                </div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-icon">📦</div>
+                                <div class="stat-content">
+                                    <div class="stat-label">Pushes</div>
+                                    <div class="stat-value" id="success-pushes">--</div>
+                                </div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-icon">⭐</div>
+                                <div class="stat-content">
+                                    <div class="stat-label">Rating</div>
+                                    <div class="stat-value" id="success-rating">--</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="success-actions">
+                            <button class="btn btn-primary" onclick="sokobanGame.nextLevel()">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="9,18 15,12 9,6"/>
+                                </svg>
+                                Next Level
+                            </button>
+                            <button class="btn btn-outline" onclick="sokobanGame.resetLevel()">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8" />
+                                    <path d="M21 3v5h-5" />
+                                    <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16" />
+                                    <path d="M8 16H3v5" />
+                                </svg>
+                                Play Again
+                            </button>
+                            <button class="btn btn-outline" onclick="window.location.href='../index.html'">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                                    <polyline points="9,22 9,12 15,12 15,22" />
+                                </svg>
+                                Home
+                            </button>
+                            <button class="btn btn-outline" onclick="sokobanGame.hideSuccessOverlay()">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M18 6L6 18" />
+                                    <path d="M6 6l12 12" />
+                                </svg>
+                                Close
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Game Instructions -->
+        <aside class="game-instructions">
+            <div class="instructions-content">
+                <h3>🎯 How to Play</h3>
+                <div class="instruction-grid">
+                    <div class="instruction-item">
+                        <div class="instruction-icon">🚶‍♂️</div>
+                        <div class="instruction-text">
+                            <strong>Move Player</strong>
+                            <p>Use WASD or arrow keys to move around</p>
+                        </div>
+                    </div>
+                    <div class="instruction-item">
+                        <div class="instruction-icon">📦</div>
+                        <div class="instruction-text">
+                            <strong>Push Boxes</strong>
+                            <p>Walk into boxes to push them (one at a time)</p>
+                        </div>
+                    </div>
+                    <div class="instruction-item">
+                        <div class="instruction-icon">🎯</div>
+                        <div class="instruction-text">
+                            <strong>Goal</strong>
+                            <p>Push all boxes onto the target spots</p>
+                        </div>
+                    </div>
+                    <div class="instruction-item">
+                        <div class="instruction-icon">⚠️</div>
+                        <div class="instruction-text">
+                            <strong>Tip</strong>
+                            <p>Be careful! Boxes can get stuck in corners</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="controls-reference">
+                    <h4>🎮 Controls</h4>
+                    <div class="control-list">
+                        <div class="control-item">
+                            <kbd>↑ ↓ ← →</kbd> or <kbd>W A S D</kbd>
+                            <span>Move player</span>
+                        </div>
+                        <div class="control-item">
+                            <kbd>U</kbd>
+                            <span>Undo last move</span>
+                        </div>
+                        <div class="control-item">
+                            <kbd>R</kbd>
+                            <span>Reset level</span>
+                        </div>
+                        <div class="control-item">
+                            <kbd>H</kbd>
+                            <span>Show hint</span>
+                        </div>
+                        <div class="control-item">
+                            <kbd>N</kbd>
+                            <span>Next level</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <script src="../js/utils.js"></script>
+    <script src="../js/games/sokoban.js"></script>
+    <script>
+        // Initialize game when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            window.sokobanGame = new SokobanGame();
+        });
+    </script>
+</body>
+</html>

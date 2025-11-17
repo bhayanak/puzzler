@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nonogram (Picross) - Puzzle Collection</title>
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="../css/games/nonogram.css">
+</head>
+<body>
+    <div class="game-container">
+        <header class="game-header">
+            <button class="back-button" onclick="window.location.href='../index.html'">
+                ← Back to Games
+            </button>
+            <h1>🌀 Nonogram (Picross)</h1>
+            <p class="game-subtitle">Reveal the hidden picture using logic and number clues</p>
+        </header>
+
+        <div class="game-content">
+            <!-- Control Panel -->
+            <div class="control-panel">
+                <div class="difficulty-selector">
+                    <label for="puzzle-select">Puzzle:</label>
+                    <select id="puzzle-select" class="game-select">
+                        <optgroup label="Easy (5x5)">
+                            <option value="0">Heart</option>
+                            <option value="1">Star</option>
+                            <option value="2">Arrow</option>
+                        </optgroup>
+                        <optgroup label="Medium (10x10)">
+                            <option value="3">Cat</option>
+                            <option value="4">House</option>
+                            <option value="5">Sailboat</option>
+                        </optgroup>
+                        <optgroup label="Hard (15x15)">
+                            <option value="6">Butterfly</option>
+                            <option value="7">Rocket</option>
+                            <option value="8">Castle</option>
+                        </optgroup>
+                    </select>
+                </div>
+
+                <div class="game-stats">
+                    <div class="stat-item">
+                        <span class="stat-icon">⏱️</span>
+                        <span class="stat-label">Time:</span>
+                        <span id="timer" class="stat-value">0:00</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-icon">❌</span>
+                        <span class="stat-label">Errors:</span>
+                        <span id="errors" class="stat-value">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-icon">✅</span>
+                        <span class="stat-label">Progress:</span>
+                        <span id="progress" class="stat-value">0%</span>
+                    </div>
+                </div>
+
+                <div class="game-actions">
+                    <button id="fill-btn" class="btn btn-secondary tool-btn active" data-tool="fill">
+                        🖌️ Fill
+                    </button>
+                    <button id="mark-btn" class="btn btn-secondary tool-btn" data-tool="mark">
+                        ❌ Mark
+                    </button>
+                    <button id="clear-btn" class="btn btn-secondary">Clear Grid</button>
+                    <button id="check-btn" class="btn btn-primary">Check Solution</button>
+                </div>
+            </div>
+
+            <!-- Game Board -->
+            <div class="board-wrapper">
+                <div class="nonogram-container">
+                    <div id="col-clues" class="col-clues"></div>
+                    <div class="nonogram-grid-wrapper">
+                        <div id="row-clues" class="row-clues"></div>
+                        <div id="nonogram-board" class="nonogram-board"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Success Overlay -->
+            <div id="board-overlay" class="board-overlay">
+                <div class="success-content">
+                    <div class="success-icon">🎉</div>
+                    <h2>Puzzle Solved!</h2>
+                    <p class="success-message">You've revealed the hidden picture!</p>
+                    <div class="success-stats">
+                        <div class="success-stat">
+                            <span class="stat-label">Time:</span>
+                            <span id="success-time" class="stat-value">0:00</span>
+                        </div>
+                        <div class="success-stat">
+                            <span class="stat-label">Errors:</span>
+                            <span id="success-errors" class="stat-value">0</span>
+                        </div>
+                        <div class="success-stat">
+                            <span class="stat-label">Rating:</span>
+                            <span id="success-rating" class="stat-value">⭐⭐⭐</span>
+                        </div>
+                    </div>
+                    <div class="success-actions">
+                        <button id="next-puzzle-btn" class="btn btn-primary">Next Puzzle</button>
+                        <button id="replay-btn" class="btn btn-secondary">Replay</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Instructions -->
+                <div class="game-instructions">
+            <h3>How to Play Nonogram</h3>
+            <ul>
+                <li><strong>Goal:</strong> Fill cells to reveal a hidden picture based on number clues</li>
+                <li><strong>Numbers:</strong> Show how many consecutive filled cells are in that row/column</li>
+                <li><strong>Multiple numbers:</strong> Mean multiple groups with at least one empty cell between them</li>
+                <li><strong>Fill Mode (🖌️):</strong> Click to fill cells black</li>
+                <li><strong>Mark Mode (❌):</strong> Click to mark cells as definitely empty</li>
+                <li><strong>Right-click:</strong> Also marks cells as empty</li>
+                <li><strong>Example:</strong> "3 1" means a group of 3 filled cells, then at least 1 empty, then 1 filled cell</li>
+            </ul>
+        </div>
+    </div>
+
+    <script src="../js/utils.js"></script>
+    <script src="../js/games/nonogram.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            if (typeof NonogramGame !== 'undefined') {
+                window.nonogramGame = new NonogramGame();
+            }
+        });
+    </script>
+</body>
+</html>

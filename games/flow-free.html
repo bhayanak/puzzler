@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flow Free - Puzzle Collection</title>
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="../css/games/flow-free.css">
+</head>
+<body>
+    <div class="game-container">
+        <header class="game-header">
+            <button class="back-button" onclick="window.location.href='../index.html'">← Back to Games</button>
+            <h1>🔗 Flow Free</h1>
+            <p class="game-subtitle">Connect matching colors without crossing paths</p>
+        </header>
+        <div class="game-content">
+            <div class="control-panel">
+                <div class="game-stats">
+                    <div class="stat-item"><span class="stat-label">Level:</span><span id="level" class="stat-value">1</span></div>
+                    <div class="stat-item"><span class="stat-label">Coverage:</span><span id="coverage" class="stat-value">0%</span></div>
+                </div>
+                <div class="game-actions">
+                    <button id="clear-btn" class="btn btn-secondary">Clear</button>
+                    <button id="solution-btn" class="btn btn-secondary">💡 Solution</button>
+                    <button id="next-btn" class="btn btn-primary">Next Level</button>
+                </div>
+            </div>
+            <div class="board-wrapper"><div id="flow-board" class="flow-board"></div></div>
+            <div id="board-overlay" class="board-overlay"><div class="success-content"><h2>Level Complete!</h2><button id="continue-btn" class="btn btn-primary">Next Level</button></div></div>
+        </div>
+        <div class="game-instructions">
+            <h3>How to Play Flow Free</h3>
+            <ul>
+                <li><strong>Goal:</strong> Connect all matching colored dots and fill 100% of the board</li>
+                <li><strong>Drag to Connect:</strong> Click/tap on a colored circle and drag to its matching color</li>
+                <li><strong>Paths Cannot Cross:</strong> Each path must be independent</li>
+                <li><strong>Backtrack:</strong> Drag back over your path to undo mistakes</li>
+                <li><strong>Clear Path:</strong> Click on any path to remove it completely</li>
+                <li><strong>Win Condition:</strong> All cells filled AND all colored pairs connected</li>
+            </ul>
+        </div>
+    </div>
+    <script src="../js/utils.js"></script>
+    <script src="../js/games/flow-free-levels.js"></script>
+    <script src="../js/games/flow-free.js"></script>
+    <script>document.addEventListener('DOMContentLoaded', () => { if (typeof FlowFreeGame !== 'undefined') window.flowGame = new FlowFreeGame(); });</script>
+</body>
+</html>

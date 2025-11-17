@@ -1,0 +1,565 @@
+/* ===================================
+   MINESWEEPER GAME STYLES
+   =================================== */
+
+/* Board Container */
+.board-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 2rem auto;
+    perspective: 1000px;
+    position: relative;
+    min-height: 500px;
+}
+
+.minesweeper-board {
+    display: grid;
+    gap: 1px;
+    background: var(--border);
+    border: 3px solid var(--border);
+    border-radius: 8px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.3s ease;
+}
+
+/* Dynamic Grid Sizing */
+.minesweeper-board[data-size="small"] {
+    grid-template-columns: repeat(9, 32px);
+    grid-template-rows: repeat(9, 32px);
+}
+
+.minesweeper-board[data-size="medium"] {
+    grid-template-columns: repeat(16, 30px);
+    grid-template-rows: repeat(16, 30px);
+}
+
+.minesweeper-board[data-size="large"] {
+    grid-template-columns: repeat(30, 24px);
+    grid-template-rows: repeat(16, 24px);
+}
+
+/* Cell Base Styles */
+.cell {
+    background: var(--surface);
+    border: 2px outset var(--primary-light);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 14px;
+    user-select: none;
+    transition: all 0.15s ease;
+    position: relative;
+    overflow: visible;
+}
+
+.cell:hover:not(.revealed):not(.flagged) {
+    background: var(--primary-light);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Cell States */
+.cell.revealed {
+    background: var(--background);
+    border: 1px solid var(--border);
+    cursor: default;
+    animation: revealCell 0.2s ease;
+}
+
+.cell.flagged {
+    background: var(--warning);
+    border-color: var(--warning-dark);
+}
+
+.cell.flagged::before {
+    content: '🚩';
+    font-size: 16px;
+    animation: flagWave 0.5s ease;
+}
+
+.cell.questioned {
+    background: var(--info);
+}
+
+.cell.questioned::before {
+    content: '?';
+    font-size: 18px;
+    font-weight: bold;
+    color: var(--text);
+}
+
+/* Number Colors */
+.cell[data-count="1"] { color: #0000ff; }
+.cell[data-count="2"] { color: #008000; }
+.cell[data-count="3"] { color: #ff0000; }
+.cell[data-count="4"] { color: #000080; }
+.cell[data-count="5"] { color: #800000; }
+.cell[data-count="6"] { color: #008080; }
+.cell[data-count="7"] { color: #000000; }
+.cell[data-count="8"] { color: #808080; }
+
+/* Mine States */
+.cell.mine {
+    background: var(--danger);
+    border-color: var(--danger-dark);
+}
+
+.cell.mine::before {
+    content: '💣';
+    font-size: 18px;
+}
+
+.cell.mine.exploded {
+    animation: explodeCell 0.6s ease forwards;
+}
+
+.cell.mine.safe-mine::before {
+    content: '💣';
+    opacity: 0.6;
+}
+
+.cell.wrong-flag {
+    background: var(--danger);
+}
+
+.cell.wrong-flag::after {
+    content: '❌';
+    position: absolute;
+    font-size: 20px;
+    animation: wrongFlag 0.5s ease;
+}
+
+/* ===================================
+   EXPLOSION ANIMATIONS
+   =================================== */
+
+/* Main Explosion Effect */
+@keyframes explodeCell {
+    0% {
+        transform: scale(1);
+        background: var(--danger);
+        box-shadow: 0 0 0 0 rgba(255, 69, 58, 0.8);
+    }
+    25% {
+        transform: scale(1.5);
+        background: #ff6600;
+        box-shadow: 0 0 20px 10px rgba(255, 102, 0, 0.8);
+    }
+    50% {
+        transform: scale(1.8);
+        background: #ffcc00;
+        box-shadow: 0 0 40px 20px rgba(255, 204, 0, 0.8);
+    }
+    75% {
+        transform: scale(1.3);
+        background: #ff3300;
+        box-shadow: 0 0 30px 15px rgba(255, 51, 0, 0.6);
+    }
+    100% {
+        transform: scale(1);
+        background: var(--danger);
+        box-shadow: 0 0 10px 5px rgba(255, 69, 58, 0.4);
+    }
+}
+
+/* Particle Explosion System */
+.explosion-particle {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 1000;
+    animation: particleExplosion 0.8s ease-out forwards;
+}
+
+@keyframes particleExplosion {
+    0% {
+        transform: translate(0, 0) scale(1);
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.8;
+    }
+    100% {
+        transform: translate(var(--tx), var(--ty)) scale(0);
+        opacity: 0;
+    }
+}
+
+/* Blast Wave Effect */
+.blast-wave {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(255, 102, 0, 0.8);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 999;
+    animation: blastWave 0.6s ease-out forwards;
+}
+
+@keyframes blastWave {
+    0% {
+        width: 20px;
+        height: 20px;
+        opacity: 1;
+        border-width: 3px;
+    }
+    100% {
+        width: 100px;
+        height: 100px;
+        opacity: 0;
+        border-width: 0;
+    }
+}
+
+/* Chain Reaction Ripple */
+.chain-ripple {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle, rgba(255, 102, 0, 0.4) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 998;
+    animation: chainRipple 0.5s ease-out forwards;
+}
+
+@keyframes chainRipple {
+    0% {
+        transform: scale(0);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(3);
+        opacity: 0;
+    }
+}
+
+/* Screen Shake Effect */
+@keyframes screenShake {
+    0%, 100% { transform: translate(0, 0) rotate(0deg); }
+    10% { transform: translate(-5px, 2px) rotate(-1deg); }
+    20% { transform: translate(5px, -2px) rotate(1deg); }
+    30% { transform: translate(-3px, 4px) rotate(-0.5deg); }
+    40% { transform: translate(3px, -4px) rotate(0.5deg); }
+    50% { transform: translate(-2px, 2px) rotate(-0.5deg); }
+    60% { transform: translate(2px, -2px) rotate(0.5deg); }
+    70% { transform: translate(-1px, 1px) rotate(-0.25deg); }
+    80% { transform: translate(1px, -1px) rotate(0.25deg); }
+    90% { transform: translate(-1px, 0px) rotate(-0.1deg); }
+}
+
+.board-shake {
+    animation: screenShake 0.5s ease-in-out;
+}
+
+/* Fire Effect Overlay */
+.fire-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(ellipse at center, 
+        rgba(255, 102, 0, 0.3) 0%, 
+        rgba(255, 204, 0, 0.2) 40%, 
+        transparent 70%);
+    pointer-events: none;
+    z-index: 997;
+    animation: fireFlicker 0.4s ease-in-out infinite;
+}
+
+@keyframes fireFlicker {
+    0%, 100% { opacity: 0.6; }
+    50% { opacity: 0.8; }
+}
+
+/* Smoke Effect */
+.smoke-particle {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(80, 80, 80, 0.6) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 996;
+    animation: smokeRise 1.5s ease-out forwards;
+}
+
+@keyframes smokeRise {
+    0% {
+        transform: translate(0, 0) scale(0.5);
+        opacity: 0.8;
+    }
+    100% {
+        transform: translate(var(--smoke-x, 0), -80px) scale(2);
+        opacity: 0;
+    }
+}
+
+/* ===================================
+   REVEAL ANIMATIONS
+   =================================== */
+
+@keyframes revealCell {
+    0% {
+        transform: rotateY(0deg);
+        background: var(--surface);
+    }
+    50% {
+        transform: rotateY(90deg);
+        background: var(--primary-light);
+    }
+    100% {
+        transform: rotateY(0deg);
+        background: var(--background);
+    }
+}
+
+@keyframes flagWave {
+    0%, 100% { transform: rotate(0deg); }
+    25% { transform: rotate(-10deg); }
+    75% { transform: rotate(10deg); }
+}
+
+@keyframes wrongFlag {
+    0% { transform: scale(0) rotate(0deg); }
+    50% { transform: scale(1.3) rotate(180deg); }
+    100% { transform: scale(1) rotate(360deg); }
+}
+
+/* Cascade Reveal Effect */
+.cell.revealed.cascade {
+    animation: cascadeReveal 0.3s ease;
+}
+
+@keyframes cascadeReveal {
+    0% {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* ===================================
+   VICTORY ANIMATIONS
+   =================================== */
+
+.cell.victory-pulse {
+    animation: victoryPulse 0.6s ease infinite;
+}
+
+@keyframes victoryPulse {
+    0%, 100% {
+        transform: scale(1);
+        filter: brightness(1);
+    }
+    50% {
+        transform: scale(1.1);
+        filter: brightness(1.3);
+    }
+}
+
+/* Confetti Particle */
+.confetti-particle {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    pointer-events: none;
+    z-index: 1001;
+    animation: confettiFall 2s ease-out forwards;
+}
+
+@keyframes confettiFall {
+    0% {
+        transform: translate(0, 0) rotate(0deg);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(var(--conf-x, 0), var(--conf-y, 500px)) rotate(720deg);
+        opacity: 0;
+    }
+}
+
+/* ===================================
+   OVERLAY STYLES
+   =================================== */
+
+.board-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.85);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+    border-radius: 8px;
+    animation: overlayFadeIn 0.3s ease;
+}
+
+.board-overlay.show {
+    display: flex;
+}
+
+@keyframes overlayFadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.success-content {
+    text-align: center;
+    color: var(--text);
+    padding: 2rem;
+    max-width: 400px;
+    animation: successBounce 0.6s ease;
+}
+
+@keyframes successBounce {
+    0% {
+        transform: scale(0.3);
+        opacity: 0;
+    }
+    50% {
+        transform: scale(1.05);
+    }
+    70% {
+        transform: scale(0.95);
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.success-icon {
+    font-size: 80px;
+    margin-bottom: 1rem;
+    animation: iconSpin 1s ease;
+}
+
+@keyframes iconSpin {
+    0% {
+        transform: rotate(0deg) scale(0);
+    }
+    50% {
+        transform: rotate(180deg) scale(1.2);
+    }
+    100% {
+        transform: rotate(360deg) scale(1);
+    }
+}
+
+.success-content h2 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+    background: linear-gradient(135deg, var(--success), var(--info));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.success-message {
+    font-size: 1.2rem;
+    color: var(--text-secondary);
+    margin-bottom: 1.5rem;
+}
+
+.success-stats {
+    display: flex;
+    justify-content: space-around;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+}
+
+.success-stat {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.success-stat .stat-label {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.success-stat .stat-value {
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: var(--success);
+}
+
+.success-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+/* ===================================
+   RESPONSIVE DESIGN
+   =================================== */
+
+@media (max-width: 1024px) {
+    .minesweeper-board[data-size="large"] {
+        grid-template-columns: repeat(30, 20px);
+        grid-template-rows: repeat(16, 20px);
+    }
+}
+
+@media (max-width: 768px) {
+    .minesweeper-board[data-size="medium"] {
+        grid-template-columns: repeat(16, 26px);
+        grid-template-rows: repeat(16, 26px);
+    }
+    
+    .minesweeper-board[data-size="large"] {
+        grid-template-columns: repeat(30, 18px);
+        grid-template-rows: repeat(16, 18px);
+    }
+    
+    .cell {
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .minesweeper-board[data-size="small"] {
+        grid-template-columns: repeat(9, 28px);
+        grid-template-rows: repeat(9, 28px);
+    }
+    
+    .minesweeper-board[data-size="medium"] {
+        grid-template-columns: repeat(16, 22px);
+        grid-template-rows: repeat(16, 22px);
+    }
+    
+    .cell {
+        font-size: 11px;
+    }
+}

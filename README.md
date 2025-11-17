@@ -117,6 +117,31 @@ puzzle-collection/
 ### 🎯 Next Puzzle Games (Phase 2 Development)
 
 #### 🏆 Priority 1: Core Collection
+#### 🎮 Available Games
+
+1. **🗼 Tower of Hanoi** ✅ **COMPLETED**
+   - Variable difficulty (3-7 disks)
+   - Drag & drop or click-to-move controls
+   - Optimal solution tracking
+   - Difficulty: ⭐⭐⭐
+   - Features: Move counter, timer, auto-solve, visual animations
+
+2. **💡 Lights Out** ✅ **COMPLETED**
+   - Classic toggle pattern matching
+   - Multiple board sizes (3x3 to 7x7)
+   - Mobile touch optimization
+   - Difficulty: ⭐⭐⭐⭐
+   - Features: Hint system, success overlay, pattern generation
+
+3. **📦 Sokoban** ✅ **COMPLETED**
+   - Box-pushing logic puzzles
+   - 30 hand-crafted levels with increasing difficulty
+   - Undo/redo with move history
+   - Difficulty: ⭐⭐⭐⭐⭐
+   - Features: Level progression, swipe controls, hint system
+
+#### 🎯 Next Puzzle Games (Phase 2 Development)
+
 1. **🧩 Sliding Puzzle (15-Puzzle)**
    - Multiple board sizes (3x3, 4x4, 5x5)
    - Custom image support (upload your own photos)
@@ -124,34 +149,91 @@ puzzle-collection/
    - Difficulty: ⭐⭐⭐
    - Features: Shuffle animation, solve verification, optimal move counter
 
-2. **💡 Lights Out**
-   - Classic toggle pattern matching
-   - Multiple board sizes (3x3 to 7x7)
-   - Random and designed puzzle sets
-   - Difficulty: ⭐⭐⭐⭐
-   - Features: Hint system, solution guarantees, pattern library
-
-3. **📦 Sokoban (Warehouse Keeper)**
-   - Box-pushing logic puzzles
-   - 50+ hand-crafted levels
-   - Undo/redo with move history
-   - Difficulty: ⭐⭐⭐⭐⭐
-   - Features: Level editor, custom level sharing, replay system
-
-#### 🎮 Priority 2: Advanced Games
-4. **🔢 Sudoku**
+2. **🔢 Sudoku**
    - 4 difficulty levels with unique solutions
    - Smart hint system with explanations
    - Notes and highlighting features
    - Difficulty: ⭐⭐⭐⭐
    - Features: Pencil marks, error detection, solving techniques guide
 
-5. **🎯 Mastermind**
+3. **🎯 Mastermind**
    - Classic code-breaking with colors/numbers
    - AI opponent with adaptive difficulty
    - Multiple game modes (4-8 positions, 6-10 colors)
    - Difficulty: ⭐⭐⭐⭐
    - Features: Strategy tips, pattern analysis, tournament mode
+
+4. **💣 Minesweeper** 🎆
+   - Classic mine detection puzzle
+   - Multiple difficulty levels (Beginner, Intermediate, Expert, Custom)
+   - **Animated mine blast effects** with explosions and chain reactions
+   - First-click safety guarantee
+   - Difficulty: ⭐⭐⭐⭐
+   - Features: Flag marking, chord clicking, timer, mine counter, explosion animations, victory celebration
+
+5. **🌀 Nonogram (Picross)**
+   - Picture logic puzzles revealing pixel art
+   - Progressive difficulty from 5x5 to 25x25 grids
+   - Multiple themed puzzle packs (animals, objects, scenes)
+   - Auto-check mode and X-marking for eliminated cells
+   - Difficulty: ⭐⭐⭐⭐⭐
+   - Features: Color nonograms, undo/redo, hint system, puzzle creator
+
+6. **🎲 2048**
+   - Addictive tile-merging number puzzle
+   - Classic 4x4 grid with smooth animations
+   - Multiple game modes (Classic, Zen, Rush, Hexagon)
+   - Power-ups: Undo, Shuffle, Remove tile
+   - Difficulty: ⭐⭐⭐
+   - Features: Best score tracking, smooth tile transitions, achievement system
+
+7. **🔗 Flow Free (Connect)**
+   - Connect matching colored dots without crossing paths
+   - 500+ handcrafted levels across 10 level packs
+   - Multiple grid sizes (5x5 to 10x10)
+   - Daily challenges and timed modes
+   - Difficulty: ⭐⭐⭐⭐
+   - Features: Hint system, perfect completion tracking, color blind mode
+
+8. **🧠 Memory Match (Concentration)**
+   - Classic card matching memory game
+   - Themed card sets (animals, emojis, symbols, flags, space)
+   - Multiplayer mode (vs AI or local 2-player)
+   - Difficulty tiers by grid size and card similarity
+   - Difficulty: ⭐⭐
+   - Features: Flip animations, combo system, speed bonuses, memory training stats
+
+9. **⚡ Tenteki (Laser Puzzle)**
+   - Redirect laser beams using mirrors to hit targets
+   - 50+ mind-bending levels with multiple laser sources
+   - Beam-splitting prisms and one-way mirrors
+   - Progressive mechanics introduction
+   - Difficulty: ⭐⭐⭐⭐⭐
+   - Features: Beam path visualization, rotation animations, star rating system
+
+10. **🎨 Tangram**
+    - Ancient Chinese geometric puzzle game
+    - 100+ shape challenges (animals, people, objects, letters)
+    - 7 tans (geometric pieces) to arrange
+    - Rotation and flip mechanics with snap-to-grid
+    - Difficulty: ⭐⭐⭐
+    - Features: Silhouette mode, outline hints, timer challenges, custom shape creator
+
+11. **🔄 Hexoku (Hexagonal Sudoku)**
+    - Sudoku variant with hexagonal cells
+    - 19-cell hexagon divided into 3 regions
+    - Uses numbers 1-9 or symbols
+    - Beautiful geometric animations
+    - Difficulty: ⭐⭐⭐⭐
+    - Features: Auto-notes, conflict highlighting, symmetry patterns, multiple themes
+
+12. **🌉 Bridges (Hashiwokakero)**
+    - Connect islands with bridges following specific rules
+    - Islands must connect using horizontal/vertical bridges
+    - Number on island shows required connections
+    - Progressive difficulty from 7x7 to 15x15 grids
+    - Difficulty: ⭐⭐⭐⭐
+    - Features: Smart bridge drawing, undo/redo, solve verification, daily puzzles
 
 ### 🚀 Advanced Platform Features
 - **🏆 Cross-Game Achievement System**: Unified progress tracking across all puzzle types

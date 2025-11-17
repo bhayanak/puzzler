@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2048 - Puzzle Collection</title>
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="../css/games/2048.css">
+</head>
+<body>
+    <div class="game-container">
+        <header class="game-header">
+            <button class="back-button" onclick="window.location.href='../index.html'">← Back to Games</button>
+            <h1>🎲 2048</h1>
+            <p class="game-subtitle">Merge tiles to reach 2048!</p>
+        </header>
+        <div class="game-content">
+            <div class="control-panel">
+                <div class="game-stats">
+                    <div class="stat-item"><span class="stat-label">Score:</span><span id="score" class="stat-value">0</span></div>
+                    <div class="stat-item"><span class="stat-label">Best:</span><span id="best-score" class="stat-value">0</span></div>
+                </div>
+                <div class="game-actions">
+                    <button id="new-game-btn" class="btn btn-primary">New Game</button>
+                    <button id="undo-btn" class="btn btn-secondary">Undo</button>
+                </div>
+            </div>
+            <div class="board-wrapper">
+                <div id="game-board" class="game-board"></div>
+            </div>
+            <div id="board-overlay" class="board-overlay">
+                <div class="success-content">
+                    <h2>You Won!</h2>
+                    <p id="final-score">Score: 0</p>
+                    <button id="continue-btn" class="btn btn-primary">Continue</button>
+                    <button id="restart-btn" class="btn btn-secondary">New Game</button>
+                </div>
+            </div>
+        </div>
+        <div class="game-instructions">
+            <h3>How to Play</h3>
+            <ul>
+                <li>Use arrow keys or swipe to move tiles</li>
+                <li>Tiles with same numbers merge into one</li>
+                <li>Reach 2048 to win!</li>
+            </ul>
+        </div>
+    </div>
+    <script src="../js/utils.js"></script>
+    <script src="../js/games/2048.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            if (typeof Game2048 !== 'undefined') {
+                window.game2048 = new Game2048();
+            }
+        });
+    </script>
+</body>
+</html>

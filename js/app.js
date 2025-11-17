@@ -52,6 +52,29 @@ class PuzzleApp {
     // Load any URL parameters
     this.handleUrlParams();
     
+    // Listen for page visibility changes to refresh stats
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden) {
+        this.updateStatsDisplay();
+      }
+    });
+
+    // Listen for storage changes from other tabs/windows
+    window.addEventListener('storage', (e) => {
+      if (e.key === 'puzzleStats' || e.key === 'minesweeper-best-times' ||
+        e.key === 'sudoku_stats' || e.key === 'sokoban_stats' ||
+        e.key === 'lightsOut_statistics' || e.key === 'slidingPuzzle_stats') {
+        this.updateStatsDisplay();
+      }
+    });
+
+    // Periodically refresh stats (every 2 seconds when page is visible)
+    setInterval(() => {
+      if (!document.hidden) {
+        this.updateStatsDisplay();
+      }
+    }, 2000);
+
     console.log('✅ Puzzle Application initialized successfully');
   }
 
@@ -346,11 +369,44 @@ class PuzzleApp {
         case 'lights-out':
           await this.loadLightsOut();
           break;
+        case 'sokoban':
+          await this.loadSokoban();
+          break;
         case 'sudoku':
           // Navigate immediately to sudoku page
           window.location.href = 'games/sudoku.html';
           return; // Exit immediately to prevent any further execution
           break;
+        case 'minesweeper':
+          await this.loadMinesweeper();
+          break;
+        case 'nonogram':
+          window.location.href = 'games/nonogram.html';
+          return;
+        case '2048':
+          window.location.href = 'games/2048.html';
+          return;
+        case 'flow-free':
+          window.location.href = 'games/flow-free.html';
+          return;
+        case 'memory-match':
+          window.location.href = 'games/memory-match.html';
+          return;
+        case 'mastermind':
+          window.location.href = 'games/mastermind.html';
+          return;
+        case 'tenteki':
+          window.location.href = 'games/tenteki.html';
+          return;
+        case 'tangram':
+          window.location.href = 'games/tangram.html';
+          return;
+        case 'hexoku':
+          window.location.href = 'games/hexoku.html';
+          return;
+        case 'bridges':
+          window.location.href = 'games/bridges.html';
+          return;
         default:
           throw new Error(`Unknown game type: ${gameType}`);
       }
@@ -387,11 +443,21 @@ class PuzzleApp {
     window.location.href = 'games/lights-out.html';
   }
 
+  async loadSokoban() {
+    // Navigate directly to game page - scripts are loaded there
+    window.location.href = 'games/sokoban.html';
+  }
+
   async loadSudoku() {
     // Navigate directly to game page - scripts are loaded there
     console.log('🚀 Navigating to Sudoku game...');
     window.location.href = 'games/sudoku.html';
     return; // Prevent any further execution
+  }
+
+  async loadMinesweeper() {
+    // Navigate directly to game page - scripts are loaded there
+    window.location.href = 'games/minesweeper.html';
   }
 
   loadScript(src) {
@@ -624,6 +690,247 @@ class PuzzleApp {
               <li><strong>Hard (25-30 clues):</strong> Advanced techniques required ★★★★☆</li>
               <li><strong>Expert (20-25 clues):</strong> Master-level puzzles ★★★★★</li>
             </ul>
+          </div>
+        `
+      },
+      'sokoban': {
+        title: 'Sokoban Rules',
+        content: `
+          <div class="game-rules">
+            <h4>Objective</h4>
+            <p>Push all boxes onto the target spots to complete each level. It's harder than it looks!</p>
+            
+            <h4>How to Play</h4>
+            <ol>
+              <li>Use WASD or arrow keys to move your character</li>
+              <li>Walk into boxes to push them (you can only push, not pull)</li>
+              <li>Push boxes onto the glowing target spots</li>
+              <li>Complete all target spots to advance to the next level</li>
+            </ol>
+            
+            <h4>Game Features</h4>
+            <ul>
+              <li><strong>10 Handcrafted Levels:</strong> From tutorial to master difficulty</li>
+              <li><strong>Undo System:</strong> Mistakes happen - undo unlimited moves</li>
+              <li><strong>Move Tracking:</strong> Monitor your moves and pushes separately</li>
+              <li><strong>Hint System:</strong> Get visual hints when you're stuck</li>
+              <li><strong>Touch Support:</strong> Swipe gestures for mobile play</li>
+              <li><strong>Level Selection:</strong> Jump to any level you've unlocked</li>
+            </ul>
+            
+            <h4>Strategy Tips</h4>
+            <ul>
+              <li><strong>Never push a box into a corner</strong> unless it's a target spot</li>
+              <li>Plan your moves - sometimes you need to move boxes out of the way first</li>
+              <li>Use the undo feature liberally to experiment with different approaches</li>
+              <li>Focus on one box at a time rather than trying to move them all</li>
+              <li>Look for "dead positions" where boxes become impossible to move</li>
+            </ul>
+            
+            <h4>Controls</h4>
+            <ul>
+              <li><strong>Movement:</strong> Arrow Keys or WASD</li>
+              <li><strong>Undo:</strong> U key or Undo button</li>
+              <li><strong>Reset:</strong> R key or Reset button</li>
+              <li><strong>Hint:</strong> H key or Hint button</li>
+              <li><strong>Next Level:</strong> N key or Next Level button</li>
+              <li><strong>Mobile:</strong> Swipe in direction you want to move</li>
+            </ul>
+            
+            <h4>Difficulty Progression</h4>
+            <ul>
+              <li><strong>Levels 1-3:</strong> Tutorial and basic concepts ★★☆☆☆</li>
+              <li><strong>Levels 4-6:</strong> Multiple boxes and sequences ★★★☆☆</li>
+              <li><strong>Levels 7-8:</strong> Complex layouts and planning ★★★★☆</li>
+              <li><strong>Levels 9-10:</strong> Master-level strategic challenges ★★★★★</li>
+            </ul>
+          </div>
+        `
+      },
+      'minesweeper': {
+        title: 'Minesweeper Rules',
+        content: `
+          <div class="game-rules">
+            <h4>Objective</h4>
+            <p>Reveal all safe cells without triggering any mines. Use logic and deduction to flag mines and clear the board!</p>
+            
+            <h4>How to Play</h4>
+            <ol>
+              <li><strong>Left Click:</strong> Reveal a cell to see what's underneath</li>
+              <li><strong>Right Click:</strong> Flag a cell you think contains a mine</li>
+              <li><strong>Chord Click:</strong> Left-click on a revealed number with correct flags to reveal surrounding cells</li>
+              <li><strong>Numbers:</strong> Show how many mines are in the 8 adjacent cells</li>
+            </ol>
+            
+            <h4>Game Features</h4>
+            <ul>
+              <li><strong>Multiple Difficulties:</strong> Beginner (9×9, 10 mines), Intermediate (16×16, 40 mines), Expert (30×16, 99 mines)</li>
+              <li><strong>First-Click Safety:</strong> Your first click is always safe - the board generates after your move</li>
+              <li><strong>Explosive Animations:</strong> Watch spectacular blast effects, particle explosions, and chain reactions</li>
+              <li><strong>Smart Timer:</strong> Tracks time from first click to completion</li>
+              <li><strong>Statistics:</strong> Track your best times for each difficulty level</li>
+              <li><strong>Hint System:</strong> Get help identifying safe cells when stuck</li>
+            </ul>
+            
+            <h4>Strategy Tips</h4>
+            <ul>
+              <li>Start by revealing corners and edges - they have fewer neighbors</li>
+              <li>Look for patterns: a "1" next to a revealed area often means the mine is obvious</li>
+              <li>Use the "1-2-1" pattern recognition for quick deductions</li>
+              <li>Flag mines as you identify them to help with chord clicking</li>
+              <li>When a number equals the unrevealed neighbors, all neighbors are mines</li>
+              <li>When flagged neighbors equal the number, all other neighbors are safe</li>
+            </ul>
+            
+            <h4>Special Features</h4>
+            <ul>
+              <li><strong>Explosion Effects:</strong> Spectacular blast animations with particles and waves</li>
+              <li><strong>Chain Reactions:</strong> Watch mines reveal in sequence from the explosion point</li>
+              <li><strong>Victory Celebrations:</strong> Confetti and pulse animations when you win</li>
+              <li><strong>Screen Shake:</strong> Feel the impact of mine explosions</li>
+            </ul>
+            
+            <h4>Difficulty Levels</h4>
+            <ul>
+              <li><strong>Beginner (9×9, 10 mines):</strong> Perfect for learning ★★☆☆☆</li>
+              <li><strong>Intermediate (16×16, 40 mines):</strong> Classic challenge ★★★☆☆</li>
+              <li><strong>Expert (30×16, 99 mines):</strong> For seasoned players ★★★★★</li>
+            </ul>
+          </div>
+        `
+      },
+      'nonogram': {
+        title: 'Nonogram Rules',
+        content: `
+          <div class="game-rules">
+            <h4>Objective</h4>
+            <p>Reveal the hidden picture by filling cells based on number clues!</p>
+            <h4>How to Play</h4>
+            <ol>
+              <li>Numbers on rows/columns indicate consecutive filled cells</li>
+              <li>Click to fill, right-click to mark empty</li>
+              <li>Use logic to deduce which cells must be filled</li>
+            </ol>
+          </div>
+        `
+      },
+      '2048': {
+        title: '2048 Rules',
+        content: `
+          <div class="game-rules">
+            <h4>Objective</h4>
+            <p>Merge tiles to reach 2048!</p>
+            <h4>How to Play</h4>
+            <ol>
+              <li>Use arrow keys to slide all tiles</li>
+              <li>Tiles with same numbers merge when they touch</li>
+              <li>Reach 2048 to win!</li>
+            </ol>
+          </div>
+        `
+      },
+      'flow-free': {
+        title: 'Flow Free Rules',
+        content: `
+          <div class="game-rules">
+            <h4>Objective</h4>
+            <p>Connect matching dots to fill 100% of the board!</p>
+            <h4>How to Play</h4>
+            <ol>
+              <li>Drag from one dot to its matching colored dot</li>
+              <li>Paths cannot cross</li>
+              <li>Fill entire board to complete</li>
+            </ol>
+          </div>
+        `
+      },
+      'memory-match': {
+        title: 'Memory Match Rules',
+        content: `
+          <div class="game-rules">
+            <h4>Objective</h4>
+            <p>Match all pairs of emoji cards!</p>
+            <h4>How to Play</h4>
+            <ol>
+              <li>Click two cards to flip them</li>
+              <li>Remember card positions</li>
+              <li>Match all pairs to win!</li>
+            </ol>
+          </div>
+        `
+      },
+      'mastermind': {
+        title: 'Mastermind Rules',
+        content: `
+          <div class="game-rules">
+            <h4>Objective</h4>
+            <p>Break the secret 4-color code!</p>
+            <h4>How to Play</h4>
+            <ol>
+              <li>Select 4 colors and submit your guess</li>
+              <li>Black pegs = correct color and position</li>
+              <li>White pegs = correct color, wrong position</li>
+            </ol>
+          </div>
+        `
+      },
+      'tenteki': {
+        title: 'Tenteki Rules',
+        content: `
+          <div class="game-rules">
+            <h4>Objective</h4>
+            <p>Redirect laser beams to hit all targets!</p>
+            <h4>How to Play</h4>
+            <ol>
+              <li>Place mirrors to redirect the laser beam</li>
+              <li>Hit all target spots</li>
+              <li>Complete levels with optimal mirror placement</li>
+            </ol>
+          </div>
+        `
+      },
+      'tangram': {
+        title: 'Tangram Rules',
+        content: `
+          <div class="game-rules">
+            <h4>Objective</h4>
+            <p>Arrange 7 geometric pieces to match the target shape!</p>
+            <h4>How to Play</h4>
+            <ol>
+              <li>Drag and rotate pieces</li>
+              <li>Match the silhouette shown</li>
+              <li>Use all 7 pieces without overlapping</li>
+            </ol>
+          </div>
+        `
+      },
+      'hexoku': {
+        title: 'Hexoku Rules',
+        content: `
+          <div class="game-rules">
+            <h4>Objective</h4>
+            <p>Fill hexagonal Sudoku with numbers 1-9!</p>
+            <h4>How to Play</h4>
+            <ol>
+              <li>Each region must contain 1-9</li>
+              <li>No repeats in any region</li>
+              <li>Use logic to deduce numbers</li>
+            </ol>
+          </div>
+        `
+      },
+      'bridges': {
+        title: 'Bridges Rules',
+        content: `
+          <div class="game-rules">
+            <h4>Objective</h4>
+            <p>Connect islands with bridges matching the numbers!</p>
+            <h4>How to Play</h4>
+            <ol>
+              <li>Connect islands with 1 or 2 bridges</li>
+              <li>Number shows total bridges needed</li>
+              <li>Bridges can't cross</li>
+            </ol>
           </div>
         `
       }
@@ -994,6 +1301,37 @@ class PuzzleApp {
         sudokuBestTimeEl.textContent = Utils.formatTime(bestTime);
       } else {
         sudokuBestTimeEl.textContent = '--:--';
+      }
+    }
+
+    // Minesweeper - uses own localStorage (best time across all difficulties)
+    const minesweeperBestTimeEl = Utils.$('#minesweeper-best-time');
+    if (minesweeperBestTimeEl) {
+      const minesweeperBestTimes = Utils.storage.get('minesweeper-best-times', {});
+      // Find the best time across all difficulty levels
+      const allTimes = Object.values(minesweeperBestTimes);
+      if (allTimes.length > 0) {
+        const bestTime = Math.min(...allTimes);
+        minesweeperBestTimeEl.textContent = Utils.formatTime(bestTime);
+      } else {
+        minesweeperBestTimeEl.textContent = '--:--';
+      }
+    }
+
+    // Sokoban - uses own localStorage (best moves)
+    const sokobanBestMovesEl = Utils.$('#sokoban-best-moves');
+    if (sokobanBestMovesEl) {
+      const sokobanStats = Utils.storage.get('sokoban_stats', {});
+      if (sokobanStats.bestMoves && sokobanStats.bestMoves.length > 0) {
+        // Find the best (lowest) moves across all levels
+        const bestMoves = Math.min(...sokobanStats.bestMoves.filter(m => m > 0));
+        if (bestMoves !== Infinity) {
+          sokobanBestMovesEl.textContent = bestMoves.toString();
+        } else {
+          sokobanBestMovesEl.textContent = '--';
+        }
+      } else {
+        sokobanBestMovesEl.textContent = '--';
       }
     }
   }

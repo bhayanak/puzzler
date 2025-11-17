@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mastermind - Puzzle Collection</title>
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="../css/games/mastermind.css">
+</head>
+<body>
+    <div class="game-container">
+        <header class="game-header">
+            <button class="back-button" onclick="window.location.href='../index.html'">← Back to Games</button>
+            <h1>🎯 Mastermind</h1>
+            <p class="game-subtitle">Break the secret code!</p>
+        </header>
+        <div class="game-content">
+            <div class="control-panel">
+                <div class="game-stats">
+                    <div class="stat-item"><span class="stat-label">Attempts:</span><span id="attempts" class="stat-value">0/10</span></div>
+                </div>
+                <div class="color-selector" id="color-selector"></div>
+                <div class="game-actions">
+                    <button id="submit-btn" class="btn btn-primary">Submit Guess</button>
+                    <button id="new-game-btn" class="btn btn-secondary">New Game</button>
+                </div>
+            </div>
+            <div class="board-wrapper"><div id="mastermind-board" class="mastermind-board"></div></div>
+            <div id="board-overlay" class="board-overlay"><div class="success-content"><h2 id="result-title">You Won!</h2><p id="result-message"></p><button id="play-again-btn" class="btn btn-primary">Play Again</button></div></div>
+        </div>
+        <div class="game-instructions">
+            <h3>How to Play Mastermind</h3>
+            <ul>
+                <li><strong>Goal:</strong> Guess the secret 4-color code in 10 attempts or less</li>
+                <li><strong>Select Colors:</strong> Click the colored circles above to build your guess</li>
+                <li><strong>Submit:</strong> Click "Submit Guess" when you have 4 colors selected</li>
+                <li><strong>Black Peg (●):</strong> Correct color in correct position</li>
+                <li><strong>White Peg (○):</strong> Correct color but wrong position</li>
+                <li><strong>No Peg:</strong> Color is not in the code</li>
+                <li><strong>Strategy:</strong> Use the feedback from each guess to narrow down the code!</li>
+            </ul>
+        </div>
+    </div>
+    <script src="../js/utils.js"></script>
+    <script src="../js/games/mastermind.js"></script>
+    <script>document.addEventListener('DOMContentLoaded', () => { if (typeof MastermindGame !== 'undefined') window.mastermindGame = new MastermindGame(); });</script>
+</body>
+</html>
