@@ -21,6 +21,7 @@ class MinesweeperGame {
         this.timer = 0;
         this.timerInterval = null;
         this.minesRemaining = 0;
+        this.flagMode = false; // Toggle between reveal and flag mode for mobile
         
         this.initializeDOM();
         this.loadBestTimes();
@@ -39,6 +40,7 @@ class MinesweeperGame {
         this.difficultySelect.addEventListener('change', (e) => this.changeDifficulty(e.target.value));
         document.getElementById('new-game-btn').addEventListener('click', () => this.newGame());
         document.getElementById('hint-btn').addEventListener('click', () => this.showHint());
+        document.getElementById('flag-mode-btn')?.addEventListener('click', () => this.toggleFlagMode());
         document.getElementById('play-again-btn').addEventListener('click', () => this.playAgain());
         document.getElementById('change-difficulty-btn').addEventListener('click', () => this.changeDifficultyFromOverlay());
     }
@@ -149,6 +151,13 @@ class MinesweeperGame {
     handleCellClick(event, row, col) {
         event.preventDefault();
         if (this.gameOver || this.gameWon) return;
+
+        // Flag mode for mobile - tap to place flag instead of reveal
+        if (this.flagMode) {
+            this.handleRightClick(event, row, col);
+            return;
+        }
+
         if (this.flagged[row][col]) return;
         if (this.revealed[row][col]) {
             // Chord clicking - reveal neighbors if flags match mine count
@@ -529,6 +538,15 @@ class MinesweeperGame {
         }
     }
     
+    toggleFlagMode() {
+        this.flagMode = !this.flagMode;
+        const btn = document.getElementById('flag-mode-btn');
+        if (btn) {
+            btn.textContent = this.flagMode ? '🚩 Flag Mode: ON' : '🚩 Flag Mode: OFF';
+            btn.classList.toggle('btn-success', this.flagMode);
+        }
+    }
+
     showHint() {
         if (this.gameOver || this.gameWon || this.firstClick) return;
         

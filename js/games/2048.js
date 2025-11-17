@@ -114,11 +114,12 @@ class Game2048 {
         
         if (JSON.stringify(this.grid) !== oldGrid) {
             // Move changed the grid - save the snapshot (before new tile)
+            // CRITICAL: Trim history BEFORE adding new tile
+            if (this.history.length >= this.maxHistory) this.history.shift();
             this.history.push({
                 grid: gridSnapshot,
                 score: scoreSnapshot
             });
-            if (this.history.length > this.maxHistory) this.history.shift();
             
             this.addRandomTile();
             this.render();

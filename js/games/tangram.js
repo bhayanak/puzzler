@@ -5,6 +5,7 @@ class TangramGame {
         this.pieces = [];
         this.selectedPiece = null;
         this.dragOffset = {x: 0, y: 0};
+        this.levels = this.createLevels();
         this.initializeDOM();
         this.newPuzzle();
     }
@@ -13,6 +14,7 @@ class TangramGame {
         this.boardElement = document.getElementById('tangram-board');
         this.puzzleElement = document.getElementById('puzzle-num');
         document.getElementById('next-btn').addEventListener('click', () => this.nextPuzzle());
+        document.getElementById('solution-btn')?.addEventListener('click', () => this.showSolution());
         
         // Mouse/touch event handlers for dragging
         this.boardElement.addEventListener('mousedown', (e) => this.onMouseDown(e));
@@ -23,8 +25,127 @@ class TangramGame {
         this.boardElement.addEventListener('touchend', (e) => this.onTouchEnd(e));
     }
     
+    createLevels() {
+        return [
+            // Level 1: Square
+            {
+                name: 'Square',
+                targetShape: 'M0,0 L200,0 L200,200 L0,200 Z',
+                solution: [
+                    { id: 0, x: 100, y: 0, rotation: 0 },     // Large triangle 1 - top right
+                    { id: 1, x: 0, y: 100, rotation: 270 },   // Large triangle 2 - bottom left
+                    { id: 2, x: 100, y: 100, rotation: 180 }, // Medium triangle - bottom right
+                    { id: 3, x: 100, y: 0, rotation: 90 },    // Small triangle 1 - top middle
+                    { id: 4, x: 50, y: 100, rotation: 0 },    // Small triangle 2 - center
+                    { id: 5, x: 0, y: 50, rotation: 0 },      // Square - left middle
+                    { id: 6, x: 0, y: 0, rotation: 0 }        // Parallelogram - top left
+                ]
+            },
+            // Level 2: House
+            {
+                name: 'House',
+                targetShape: 'M50,0 L150,0 L200,50 L200,200 L0,200 L0,50 Z',
+                solution: [
+                    { id: 0, x: 50, y: 0, rotation: 45 },     // Large triangle 1 - roof
+                    { id: 1, x: 0, y: 50, rotation: 0 },      // Large triangle 2 - left wall
+                    { id: 2, x: 150, y: 100, rotation: 270 }, // Medium triangle - right part
+                    { id: 3, x: 100, y: 50, rotation: 180 },  // Small triangle 1 - roof detail
+                    { id: 4, x: 50, y: 150, rotation: 0 },    // Small triangle 2 - door
+                    { id: 5, x: 100, y: 150, rotation: 0 },   // Square - window
+                    { id: 6, x: 0, y: 150, rotation: 0 }      // Parallelogram - base
+                ]
+            },
+            // Level 3: Cat
+            {
+                name: 'Cat',
+                targetShape: 'M20,20 L60,0 L100,20 L120,60 L100,100 L60,120 L20,100 L0,60 Z',
+                solution: [
+                    { id: 0, x: 60, y: 0, rotation: 315 },    // Large triangle 1 - head
+                    { id: 1, x: 20, y: 60, rotation: 0 },     // Large triangle 2 - body
+                    { id: 2, x: 100, y: 60, rotation: 90 },   // Medium triangle - tail
+                    { id: 3, x: 40, y: 10, rotation: 135 },   // Small triangle 1 - ear
+                    { id: 4, x: 80, y: 10, rotation: 45 },    // Small triangle 2 - ear
+                    { id: 5, x: 50, y: 50, rotation: 0 },     // Square - body
+                    { id: 6, x: 20, y: 100, rotation: 0 }     // Parallelogram - leg
+                ]
+            },
+            // Level 4: Boat
+            {
+                name: 'Boat',
+                targetShape: 'M100,0 L150,100 L200,100 L150,150 L50,150 L0,100 L50,100 Z',
+                solution: [
+                    { id: 0, x: 100, y: 0, rotation: 180 },   // Large triangle 1 - sail
+                    { id: 1, x: 0, y: 100, rotation: 0 },     // Large triangle 2 - hull
+                    { id: 2, x: 150, y: 100, rotation: 270 }, // Medium triangle - hull right
+                    { id: 3, x: 120, y: 20, rotation: 225 },  // Small triangle 1 - sail top
+                    { id: 4, x: 75, y: 125, rotation: 0 },    // Small triangle 2 - hull detail
+                    { id: 5, x: 50, y: 100, rotation: 0 },    // Square - hull middle
+                    { id: 6, x: 100, y: 50, rotation: 270 }   // Parallelogram - sail middle
+                ]
+            },
+            // Level 5: Bird
+            {
+                name: 'Bird',
+                targetShape: 'M0,50 L50,0 L150,50 L200,100 L150,150 L100,120 L50,150 Z',
+                solution: [
+                    { id: 0, x: 50, y: 0, rotation: 45 },     // Large triangle 1 - wing
+                    { id: 1, x: 150, y: 100, rotation: 135 }, // Large triangle 2 - tail
+                    { id: 2, x: 100, y: 50, rotation: 0 },    // Medium triangle - body
+                    { id: 3, x: 30, y: 30, rotation: 90 },    // Small triangle 1 - head
+                    { id: 4, x: 175, y: 125, rotation: 315 }, // Small triangle 2 - tail tip
+                    { id: 5, x: 75, y: 75, rotation: 45 },    // Square - body center
+                    { id: 6, x: 125, y: 75, rotation: 0 }     // Parallelogram - wing detail
+                ]
+            },
+            // Level 6: Running Person
+            {
+                name: 'Runner',
+                targetShape: 'M50,0 L100,30 L120,80 L100,130 L50,150 L20,120 L0,70 L20,30 Z',
+                solution: [
+                    { id: 0, x: 50, y: 0, rotation: 315 },    // Large triangle 1 - torso
+                    { id: 1, x: 20, y: 70, rotation: 45 },    // Large triangle 2 - legs
+                    { id: 2, x: 100, y: 30, rotation: 180 },  // Medium triangle - arm
+                    { id: 3, x: 60, y: 10, rotation: 135 },   // Small triangle 1 - head
+                    { id: 4, x: 50, y: 130, rotation: 270 },  // Small triangle 2 - foot
+                    { id: 5, x: 40, y: 60, rotation: 45 },    // Square - torso center
+                    { id: 6, x: 80, y: 80, rotation: 0 }      // Parallelogram - hip
+                ]
+            },
+            // Level 7: Fish
+            {
+                name: 'Fish',
+                targetShape: 'M0,80 L40,40 L120,40 L160,80 L120,120 L40,120 Z',
+                solution: [
+                    { id: 0, x: 40, y: 40, rotation: 0 },     // Large triangle 1 - body top
+                    { id: 1, x: 40, y: 120, rotation: 270 },  // Large triangle 2 - body bottom
+                    { id: 2, x: 0, y: 80, rotation: 315 },    // Medium triangle - tail
+                    { id: 3, x: 130, y: 70, rotation: 45 },   // Small triangle 1 - fin
+                    { id: 4, x: 110, y: 50, rotation: 0 },    // Small triangle 2 - head detail
+                    { id: 5, x: 70, y: 70, rotation: 0 },     // Square - body center
+                    { id: 6, x: 120, y: 80, rotation: 0 }     // Parallelogram - mouth
+                ]
+            },
+            // Level 8: Dog
+            {
+                name: 'Dog',
+                targetShape: 'M20,40 L80,0 L140,40 L160,100 L120,140 L60,140 L20,100 Z',
+                solution: [
+                    { id: 0, x: 80, y: 0, rotation: 270 },    // Large triangle 1 - head/ear
+                    { id: 1, x: 20, y: 100, rotation: 45 },   // Large triangle 2 - body
+                    { id: 2, x: 140, y: 40, rotation: 180 },  // Medium triangle - back
+                    { id: 3, x: 60, y: 20, rotation: 90 },    // Small triangle 1 - ear
+                    { id: 4, x: 60, y: 120, rotation: 0 },    // Small triangle 2 - leg
+                    { id: 5, x: 80, y: 80, rotation: 0 },     // Square - body middle
+                    { id: 6, x: 120, y: 100, rotation: 270 }  // Parallelogram - tail
+                ]
+            }
+        ];
+    }
+
     newPuzzle() {
         this.createPieces();
+        const levelIndex = (this.puzzleNum - 1) % this.levels.length;
+        this.currentLevel = this.levels[levelIndex];
         this.render();
     }
     
@@ -53,7 +174,7 @@ class TangramGame {
     render() {
         this.boardElement.innerHTML = `
             <div style="margin-bottom: 15px; padding: 10px; background: #f0f0f0; border-radius: 8px; text-align: center;">
-                <strong>🎯 Target: SQUARE</strong> - Arrange all 7 pieces to form a square shape
+                <strong>🎯 Target: ${this.currentLevel.name}</strong> - Arrange all 7 pieces to form the shape
             </div>
             <svg width="100%" height="500" style="border: 2px solid #ddd; border-radius: 8px; background: #f8f9fa;">
                 <defs>
@@ -188,6 +309,26 @@ class TangramGame {
         this.newPuzzle();
     }
     
+    showSolution() {
+        if (!this.currentLevel || !this.currentLevel.solution) {
+            alert('No solution available for this level');
+            return;
+        }
+
+        // Apply solution positions and rotations
+        this.currentLevel.solution.forEach(sol => {
+            const piece = this.pieces.find(p => p.id === sol.id);
+            if (piece) {
+                piece.x = sol.x;
+                piece.y = sol.y;
+                piece.rotation = sol.rotation;
+            }
+        });
+
+        this.render();
+        alert(`💡 Solution shown for ${this.currentLevel.name}! Study the arrangement.`);
+    }
+
     updateGlobalStats() {
         const puzzleStats = JSON.parse(localStorage.getItem('puzzleStats') || '{}');
         if (!puzzleStats.totalGamesCompleted) puzzleStats.totalGamesCompleted = 0;
